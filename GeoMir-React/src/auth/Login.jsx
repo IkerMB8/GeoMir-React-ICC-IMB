@@ -14,22 +14,22 @@ export default function Login({ setCanvi }) {
         "Content-Type": "application/json"
       },
       method: "POST",
-      body: JSON.stringify({ email: email, password: password })
+      body: JSON.stringify({ email: correu, password: password })
     })
-      .then((data) => data.json())
-      .then((resposta) => {
-        console.log(resposta);
-        if (resposta.success === true) {
-          alert(resposta.authToken);
-        }
-        else{
-          setError(resposta.message);
-        }
-      })
-      .catch((data) => {
-        console.log(data);
-        alert("Catchch");
-      });
+    .then((data) => data.json())
+    .then((resposta) => {
+      console.log(resposta);
+      if (resposta.success === true) {
+        alert(resposta.authToken);
+      }
+      else{
+        setError(resposta.message);
+      }
+    })
+    .catch((data) => {
+      console.log(data);
+      alert("Catchch");
+    });
     alert("He enviat les Dades:  " + correu + "/" + password);
   };
 
@@ -62,10 +62,9 @@ export default function Login({ setCanvi }) {
                 }} 
               />
           </div>
-
+          {error ? <div class="error">{error}</div> : <></>}
           <div class="form__field">
               <input onClick={(e) => {sendLogin(e);}} class="submit" type="submit" value="Iniciar Sesión"></input>
-              { error ? (error)  : (<></>)}
           </div>
 
         </form>

@@ -2,7 +2,8 @@ import { useState } from "react";
 export default function Register({ setCanvi }) {
   
   let [formulario, setFormulari] = useState({});
-
+  let [error, setError] = useState("");
+  
   const handleChange = (e) => {
     e.preventDefault();
 
@@ -14,8 +15,8 @@ export default function Register({ setCanvi }) {
   const handleRegister = (e) => {
     e.preventDefault();
 
-    let { user, correu, password, password2 } = formulario;
-    alert("He enviat les Dades:  " + user +"/" +correu +"/" + password + "/" +password2);
+    let { name, email, password, password2 } = formulario;
+    alert("He enviat les Dades:  " + name +"/" +email +"/" + password + "/" +password2);
     if (password2 !== password) {
       alert("Els passwords han de coincidir");
       return false;
@@ -28,7 +29,7 @@ export default function Register({ setCanvi }) {
       },
       method: "POST",
       // Si els noms i les variables coincideix, podem simplificar
-      body: JSON.stringify({ user, correu, password, password2 })
+      body: JSON.stringify({ name, email, password })
     })
     .then((data) => data.json())
     .then((resposta) => {
@@ -36,13 +37,16 @@ export default function Register({ setCanvi }) {
       if (resposta.success === true) {
         alert(resposta.authToken);
       }
+      else{
+        setError(resposta.message);
+      }
     })
     .catch((data) => {
       console.log(data);
       alert("Catchch");
     });
 
-    alert("He enviat les Dades:  " + correu + "/" + password);
+    alert("He enviat les Dades:  " + email + "/" + password);
   };
 
 
@@ -58,14 +62,14 @@ export default function Register({ setCanvi }) {
             <label for="login__username"><svg class="icon">
                 <use xlink:href="#icon-user"></use>
               </svg><span class="hidden">Username</span></label>
-              <input class="form__input" name="user" id="username" type="text" placeholder="Username" onChange={handleChange}/>              
+              <input class="form__input" name="name" id="username" type="text" placeholder="Username" onChange={handleChange}/>              
           </div>
 
           <div class="form__field">
             <label for="login__username"><svg class="icon">
                 <use xlink:href="#icon-user"></use>
               </svg><span class="hidden">Username</span></label>
-              <input class="form__input" name="correu" id="email" type="mail" placeholder="Email" onChange={handleChange}/>      
+              <input class="form__input" name="email" id="email" type="mail" placeholder="Email" onChange={handleChange}/>      
           </div>
 
           <div class="form__field">
@@ -82,6 +86,7 @@ export default function Register({ setCanvi }) {
               <input class="form__input" name="password2" id="confirm-password" type="password" placeholder="******************" onChange={handleChange}/>  
           </div>
 
+          {error ? <div class="error">{error}</div> : <></>}
           <div class="form__field">
               <input onClick={(e) => {handleRegister(e);}} class="submit" type="submit" value="Regístrate"></input>
           </div>
@@ -92,7 +97,6 @@ export default function Register({ setCanvi }) {
             <use xlink:href="#icon-arrow-right"></use>
           </svg>
         </p>
-
       </div>
 
       <svg xmlns="http://www.w3.org/2000/svg" class="icons">
