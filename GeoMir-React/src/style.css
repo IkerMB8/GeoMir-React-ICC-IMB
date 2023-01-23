@@ -1,0 +1,65 @@
+h1{
+    text-align: center;
+    color: white;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+body{
+    background-color: #1a1b30;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+.App{
+    justify-content: center;
+    width: 100%;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px;
+    gap: 5px;
+}
+
+.colocar{
+    display: flex;
+    justify-content: center;
+    border: 2px solid white;
+    border-radius: 25px;
+    padding: 15px;
+    background-color: white;
+    flex-direction: column;
+}
+
+.cambio{
+    border: 1px solid lightgray ;
+    border-radius: 25px;
+    width: 75%;
+    padding: 10px;
+    background-color: rgb(219, 219, 219);
+    margin-left: 25px;
+}
+
+.btn{
+    background-color: dodgerblue;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2em;
+    border: 0;
+    border-radius: 25px;
+    padding: 10px;
+}
+
+input{
+    border-radius: 25px;
+    background-color: rgb(245, 243, 243);
+    border: 1px lightgray solid;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    padding-left: 10px;
+}
