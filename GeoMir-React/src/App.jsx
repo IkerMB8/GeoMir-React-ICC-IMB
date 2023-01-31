@@ -8,7 +8,11 @@ import Header from './Layout/Header';
 import Footer from "./Layout/Footer";
 import About from "./About";
 import Places from "./Places/Places";
-import Posts from "./Posts/Posts";
+import Post from "./Posts/Post";
+import PostsList from "./Posts/Posts";
+import PostsGrid from "./Posts/PostsGrid";
+import PostsAdd from "./Posts/PostsAdd";
+import PostsEdit from "./Posts/PostsEdit";
 import NotFound from "./NotFound";
 
 export default function App() {
@@ -23,8 +27,12 @@ export default function App() {
             <Header />
             <Routes>
               <Route path='*' element={<NotFound />} />
-              <Route path="/" element={<Posts />} />
-              <Route path="/posts" element={<Posts />} />
+              <Route path="/" element={<PostsList />} />
+              <Route path="/posts" element={<PostsList />} />
+              <Route path="/posts/grid" element={<PostsGrid />} />
+              <Route path="/posts/add" element={<PostsAdd />} />
+              <Route path="/posts/:id" element={<Post/> } />
+              <Route path="/posts/edit/:id" element={<PostsEdit />} />
               <Route path="/places" element={<Places />} />
               <Route path="/about" element={<About />} />
             </Routes>
