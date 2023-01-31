@@ -1,9 +1,12 @@
-import { useState } from "react";
+import React from 'react'
+import { UserContext } from '../userContext';
+import { useState, useContext } from 'react';
+
 export default function Register({ setCanvi }) {
   
   let [formulario, setFormulari] = useState({});
   let [error, setError] = useState("");
-  
+  let {authToken, setAuthToken}=useContext(UserContext);
   const handleChange = (e) => {
     e.preventDefault();
 
@@ -12,41 +15,68 @@ export default function Register({ setCanvi }) {
       [e.target.name]: e.target.value
     });
   };
-  const handleRegister = (e) => {
-    e.preventDefault();
+  // const handleRegister = (e) => {
+  //   e.preventDefault();
 
+  //   let { name, email, password, password2 } = formulario;
+  //   alert("He enviat les Dades:  " + name +"/" +email +"/" + password + "/" +password2);
+  //   if (password2 !== password) {
+  //     alert("Els passwords han de coincidir");
+  //     return false;
+  //   }
+
+  //   fetch("https://backend.insjoaquimmir.cat/api/register", {
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     method: "POST",
+  //     // Si els noms i les variables coincideix, podem simplificar
+  //     body: JSON.stringify({ name, email, password })
+  //   })
+  //   .then((data) => data.json())
+  //   .then((resposta) => {
+  //     console.log(resposta);
+  //     if (resposta.success === true) {
+  //       alert(resposta.authToken);
+  //       setAuthToken(resposta.authToken)
+  //     }
+  //     else{
+  //       setError(resposta.message);
+  //     }
+  //   })
+  //   .catch((data) => {
+  //     console.log(data);
+  //     alert("Catchch");
+  //   });
+
+  //   alert("He enviat les Dades:  " + email + "/" + password);
+  // };
+  const handleRegister = async (e) => {
+    e.preventDefault();
     let { name, email, password, password2 } = formulario;
     alert("He enviat les Dades:  " + name +"/" +email +"/" + password + "/" +password2);
-    if (password2 !== password) {
-      alert("Els passwords han de coincidir");
-      return false;
+    // Enviam dades a l'aPI i recollim resultat
+    try {
+      const data = await fetch("https://backend.insjoaquimmir.cat/api/register", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        // Si els noms i les variables coincideix, podem simplificar
+        body: JSON.stringify({ name, email, password })
+      })
+
+      const resposta = await data.json();
+      if (resposta.success === true) alert(resposta.authToken), setAuthToken(resposta.authToken);
+      else setError(resposta.message);
+
+      alert("He enviat les Dades:  " + email + "/" + password);
+    } catch {
+      console.log("Error");
+      //alert("catch");
     }
-
-    fetch("https://backend.insjoaquimmir.cat/api/register", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      // Si els noms i les variables coincideix, podem simplificar
-      body: JSON.stringify({ name, email, password })
-    })
-    .then((data) => data.json())
-    .then((resposta) => {
-      console.log(resposta);
-      if (resposta.success === true) {
-        alert(resposta.authToken);
-      }
-      else{
-        setError(resposta.message);
-      }
-    })
-    .catch((data) => {
-      console.log(data);
-      alert("Catchch");
-    });
-
-    alert("He enviat les Dades:  " + email + "/" + password);
   };
 
 
@@ -54,52 +84,52 @@ export default function Register({ setCanvi }) {
     <>
       <h1>Regístrate</h1>
       
-      <div class="grid">
+      <div className="grid">
 
-        <form method="POST" class="form login">
+        <form method="POST" className="form login">
 
-          <div class="form__field">
-            <label for="login__username"><svg class="icon">
-                <use xlink:href="#icon-user"></use>
-              </svg><span class="hidden">Username</span></label>
-              <input class="form__input" name="name" id="username" type="text" placeholder="Username" onChange={handleChange}/>              
+          <div className="form__field">
+            <label htmlFor="login__username"><svg className="icon">
+                <use xlinkHref="#icon-user"></use>
+              </svg><span className="hidden">Username</span></label>
+              <input className="form__input" name="name" id="username" type="text" placeholder="Username" onChange={handleChange}/>              
           </div>
 
-          <div class="form__field">
-            <label for="login__username"><svg class="icon">
-                <use xlink:href="#icon-user"></use>
-              </svg><span class="hidden">Username</span></label>
-              <input class="form__input" name="email" id="email" type="mail" placeholder="Email" onChange={handleChange}/>      
+          <div className="form__field">
+            <label htmlFor="login__username"><svg className="icon">
+                <use xlinkHref="#icon-user"></use>
+              </svg><span className="hidden">Username</span></label>
+              <input className="form__input" name="email" id="email" type="mail" placeholder="Email" onChange={handleChange}/>      
           </div>
 
-          <div class="form__field">
-            <label for="login__password"><svg class="icon">
-                <use xlink:href="#icon-lock"></use>
-              </svg><span class="hidden">Password</span></label>
-              <input class="form__input" name="password" id="password" type="password" placeholder="******************" onChange={handleChange}/>  
+          <div className="form__field">
+            <label htmlFor="login__password"><svg className="icon">
+                <use xlinkHref="#icon-lock"></use>
+              </svg><span className="hidden">Password</span></label>
+              <input className="form__input" name="password" id="password" type="password" placeholder="******************" onChange={handleChange}/>  
           </div>
 
-          <div class="form__field">
-            <label for="login__password"><svg class="icon">
-                <use xlink:href="#icon-lock"></use>
-              </svg><span class="hidden">Password</span></label>
-              <input class="form__input" name="password2" id="confirm-password" type="password" placeholder="******************" onChange={handleChange}/>  
+          <div className="form__field">
+            <label htmlFor="login__password"><svg className="icon">
+                <use xlinkHref="#icon-lock"></use>
+              </svg><span className="hidden">Password</span></label>
+              <input className="form__input" name="password2" id="confirm-password" type="password" placeholder="******************" onChange={handleChange}/>  
           </div>
 
-          {error ? <div class="error">{error}</div> : <></>}
-          <div class="form__field">
-              <input onClick={(e) => {handleRegister(e);}} class="submit" type="submit" value="Regístrate"></input>
+          {error ? <div className="error">{error}</div> : <></>}
+          <div className="form__field">
+              <input onClick={(e) => {handleRegister(e);}} className="submit" type="submit" value="Regístrate"></input>
           </div>
 
         </form>
-        <p class="text--center">¿Ya tienes cuenta? <a href="#" onClick={() => {setCanvi(true);}} > Inicia Sesión</a>
-          <svg class="icon">
-            <use xlink:href="#icon-arrow-right"></use>
+        <p className="text--center">¿Ya tienes cuenta? <a href="#" onClick={() => {setCanvi(true);}} > Inicia Sesión</a>
+          <svg className="icon">
+            <use xlinkHref="#icon-arrow-right"></use>
           </svg>
         </p>
       </div>
 
-      <svg xmlns="http://www.w3.org/2000/svg" class="icons">
+      <svg xmlns="http://www.w3.org/2000/svg" className="icons">
         <symbol id="icon-arrow-right" viewBox="0 0 1792 1792">
           <path d="M1600 960q0 54-37 91l-651 651q-39 37-91 37-51 0-90-37l-75-75q-38-38-38-91t38-91l293-293H245q-52 0-84.5-37.5T128 1024V896q0-53 32.5-90.5T245 768h704L656 474q-38-36-38-90t38-90l75-75q38-38 90-38 53 0 91 38l651 651q37 35 37 90z" />
         </symbol>

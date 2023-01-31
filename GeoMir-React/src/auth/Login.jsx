@@ -1,82 +1,115 @@
-import { useState } from "react";
 import React from "react";
+import { UserContext } from "../userContext";
+import { useState , useContext } from "react";
+
 export default function Login({ setCanvi }) {
+
   let [correu, setCorreu] = useState("");
   let [password, setPassword] = useState("");
   let [error, setError] = useState("");
-  const sendLogin = (e) => {
+  let {authToken, setAuthToken} = useContext(UserContext);
+
+  // const sendLogin = (e) => {
+  //   e.preventDefault();
+  //   console.log("Comprovant credencials....");
+  //   // Enviam dades a l'aPI i recollim resultat
+  //   fetch("https://backend.insjoaquimmir.cat/api/login", {
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     method: "POST",
+  //     body: JSON.stringify({ email: correu, password: password })
+  //   })
+  //   .then((data) => data.json())
+  //   .then((resposta) => {
+  //     console.log(resposta);
+  //     if (resposta.success === true) {
+  //       alert(resposta.authToken);
+  //       setAuthToken(resposta.authToken);
+  //     }else{
+  //       setError(resposta.message);
+  //     }
+  //   })
+  //   .catch((data) => {
+  //     console.log(data);
+  //     alert("Catchch");
+  //   });
+  //   alert("He enviat les Dades:  " + correu + "/" + password);
+  // };
+  const sendLogin = async (e) => {
     e.preventDefault();
-    console.log("Comprovant credencials....");
+  
     // Enviam dades a l'aPI i recollim resultat
-    fetch("https://backend.insjoaquimmir.cat/api/login", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({ email: correu, password: password })
-    })
-    .then((data) => data.json())
-    .then((resposta) => {
-      console.log(resposta);
-      if (resposta.success === true) {
-        alert(resposta.authToken);
-      }
-      else{
-        setError(resposta.message);
-      }
-    })
-    .catch((data) => {
-      console.log(data);
-      alert("Catchch");
-    });
-    alert("He enviat les Dades:  " + correu + "/" + password);
+    try {
+      const data = await fetch("https://backend.insjoaquimmir.cat/api/login", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify({ email: correu, password: password })
+      });
+
+
+      const resposta = await data.json();
+      if (resposta.success === true) alert(resposta.authToken), setAuthToken(resposta.authToken);
+      else setError(resposta.message);
+      // else alert("La resposta no ha triomfat");
+
+
+      alert("He enviat les Dades:  " + email + "/" + password);
+    } catch {
+      console.log("Error");
+      //alert("catch");
+    }
   };
+
 
   return (
     <>
       <h1>Login</h1>
-      <div class="grid">
+      <div className="grid">
 
-        <form method="POST" class="form login">
+        <form method="POST" className="form login">
 
-          <div class="form__field">
-            <label for="login__username"><svg class="icon">
-                <use xlink:href="#icon-user"></use>
-              </svg><span class="hidden">Username</span></label>
-              <input id="username" type="text" name="correu" class="form__input" placeholder="Email"
+          <div className="form__field">
+            <label htmlFor="login__username"><svg className="icon">
+                <use xlinkHref="#icon-user"></use>
+              </svg><span className="hidden">Username</span></label>
+              <input id="username" type="text" name="correu" className="form__input" placeholder="Email"
                 onChange={(e) => {
                   setCorreu(e.target.value);
                 }}
               />              
           </div>
 
-          <div class="form__field">
-            <label for="login__password"><svg class="icon">
-                <use xlink:href="#icon-lock"></use>
-              </svg><span class="hidden">Password</span></label>
+          <div className="form__field">
+            <label htmlFor="login__password"><svg className="icon">
+                <use xlinkHref="#icon-lock"></use>
+              </svg><span className="hidden">Password</span></label>
               
-              <input id="password" type="password" name="password" class="form__input" placeholder="Password"  
+              <input id="password" type="password" name="password" className="form__input" placeholder="Password"  
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }} 
               />
           </div>
-          {error ? <div class="error">{error}</div> : <></>}
-          <div class="form__field">
-              <input onClick={(e) => {sendLogin(e);}} class="submit" type="submit" value="Iniciar Sesión"></input>
+          {error ? <div className="error">{error}</div> : <></>}
+          <div className="form__field">
+              <input onClick={(e) => {sendLogin(e);}} className="submit" type="submit" value="Iniciar Sesión"></input>
           </div>
 
         </form>
-        <p class="text--center">¿No tienes cuenta? <a href="#" onClick={() => {setCanvi(false);}} > Regístrate</a>
-          <svg class="icon">
-            <use xlink:href="#icon-arrow-right"></use>
+        <p className="text--center">¿No tienes cuenta? <a href="#" onClick={() => {setCanvi(false);}} > Regístrate</a>
+          <svg className="icon">
+            <use xlinkHref="#icon-arrow-right"></use>
           </svg>
         </p>
 
       </div>
 
-      <svg xmlns="http://www.w3.org/2000/svg" class="icons">
+      <svg xmlns="http://www.w3.org/2000/svg" className="icons">
         <symbol id="icon-arrow-right" viewBox="0 0 1792 1792">
           <path d="M1600 960q0 54-37 91l-651 651q-39 37-91 37-51 0-90-37l-75-75q-38-38-38-91t38-91l293-293H245q-52 0-84.5-37.5T128 1024V896q0-53 32.5-90.5T245 768h704L656 474q-38-36-38-90t38-90l75-75q38-38 90-38 53 0 91 38l651 651q37 35 37 90z" />
         </symbol>
