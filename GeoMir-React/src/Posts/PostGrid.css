@@ -1,0 +1,122 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
+.posts{
+    display:grid; 
+    justify-content:center; 
+    text-align:center;
+    margin-left: 35%;
+    margin-right: 35%;
+    margin-bottom: 30px;
+}
+.post{
+    border: 4px solid black;
+    border-radius: 10px;
+    margin-top: 30px;
+    padding: 5px 25px 8px 25px;
+    text-align: left;
+    margin-bottom: 30px;
+    background-color: white;
+}
+.topp{
+    height: auto;
+    display: grid;
+}
+.cajatopp{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.perf{
+    display:flex; 
+    align-items:center; 
+    margin-bottom: 5px;
+}
+.perf img{
+    margin-top:5px; 
+    width: 70px; 
+    height: 70px; 
+    border-radius: 160px; 
+    border: 1px solid black;
+}
+.perf p{
+    font-weight: bold; 
+    margin-left:5px ;
+    margin-top: 20px;
+}
+.cerrar3p{
+    border:0;
+    background-color:white;
+}
+.modal3p{
+    width: 40%;
+    border-radius: 25px !important;
+    font-family: 'Montserrat', sans-serif;
+    justify-content:center;
+    text-align:center;
+    padding:0;
+    overflow: hidden;
+}
+.modal3p::backdrop {
+    background: rgb(0, 0, 0, 0.55);
+}
+.tres_puntos{
+    position: relative;
+    flex-direction: column;
+    width: 100%;
+    color: var(--bs-modal-color);
+    pointer-events: auto;
+    background-color: var(--bs-modal-bg);
+    background-clip: padding-box;
+    border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+    border-radius: var(--bs-modal-border-radius);
+    outline: 0;
+}
+.logreg{
+    display: flex ;
+    justify-content: center;
+    align-items: center;
+}
+.btnIND{
+    width:100%;
+    padding:20px;
+    margin:0;
+    border: 1px solid #dbdbdb;
+}
+.spanDelete{
+    color: red;
+    font-weight: 700;
+}
+.functizq{
+    float: left;
+    align-items: center;
+    display: flex;
+    font-size: 2em;
+}
+.functizq *{
+    margin-right: 5px;
+}
+.functder{
+    float: right;
+    align-items: center;
+    display: flex;
+    font-size: 2em;
+}
+.review{
+    border-radius: 25px; 
+    border: 2px solid #1a1830;
+    width: 100%;
+    float: left; 
+    display: flex; 
+    justify-content: center; 
+    text-align: center; 
+    padding: 5px;
+    font-size: 2em;
+}
+.funct{
+    overflow: hidden;
+}
+.imgpub{
+    max-height: 650px;
+    border: 2px solid black; 
+    width: 100%;
+    margin: 0px;
+}
