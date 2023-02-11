@@ -13,7 +13,12 @@ import PlaceAdd from "./Places/PlacesAdd";
 import PlaceEdit from "./Places/PlacesEdit";
 import PlaceGrid from "./Places/PlacesGrid";
 import PlaceMenu from "./Places/PlacesMenu";
-import Posts from "./Posts/Posts";
+import Post from "./Posts/Post";
+import PostsList from "./Posts/PostsList";
+import PostsGrid from "./Posts/PostsGrid";
+import PostsAdd from "./Posts/PostsAdd";
+import PostsEdit from "./Posts/PostsEdit";
+import PostsMenu from "./Posts/PostsMenu";
 import NotFound from "./NotFound";
 
 export default function App() {
@@ -29,8 +34,12 @@ export default function App() {
             <Header />
             <Routes>
               <Route path='*' element={<NotFound />} />
-              <Route path="/" element={<Posts />} />
-              <Route path="/posts" element={<Posts />} />
+              <Route path="/" element={<PostsList />} />
+              <Route path="/posts" element={<> <PostsMenu/> <PostsList /> </>} />
+              <Route path="/posts/grid" element={<> <PostsMenu/> <PostsGrid /> </>} />
+              <Route path="/posts/add" element={<> <PostsMenu/> <PostsAdd /> </>} />
+              <Route path="/posts/:id" element={<> <PostsMenu/> <Post/> </>} />
+              <Route path="/posts/edit/:id" element={<> <PostsMenu/><PostsEdit /> </>} />
               <Route path="/places" element={<> <PlaceMenu/><PlaceList/> </>} />
               <Route path="/places/add" element={<> <PlaceMenu/><PlaceAdd/> </>} />
               <Route path="/places/grid" element={<> <PlaceMenu/><PlaceGrid /> </>} />
