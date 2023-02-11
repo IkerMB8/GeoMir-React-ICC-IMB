@@ -81,7 +81,7 @@ export default function PlacesAdd() {
   
   }, [])
 
-  return <div className="contenido contenidoadd">
+  return <div className="contenido contenidoaddplace">
             {success ? <div className="success">{success}</div> : <></>}
             <h1>PlaceAdd</h1>
             <form method='POST' className="material-form">

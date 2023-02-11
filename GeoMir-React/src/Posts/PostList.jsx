@@ -16,9 +16,9 @@ export default function PostList ({post})  {
         <td>{post.longitude}</td>
         <td>{post.visibility.name}</td>
         <td>{post.likes_count}</td>  
-        <td><Link class="iconos" to={"/posts/"+post.id} title="Veure">👁️</Link></td>
-        <td><Link class="iconos" to={"/posts/edit/"+post.id} title="Editar">📝</Link></td>
-        <td><Link class="iconos" to={"/posts/delete/"+post.id} title="Eliminar">❌</Link></td> 
+        <td><Link className="iconos" to={"/posts/"+post.id} title="Veure">👁️</Link></td>
+        <td><Link className="iconos" to={"/posts/edit/"+post.id} title="Editar">📝</Link></td>
+        <td><Link className="iconos" to={"/posts/delete/"+post.id} title="Eliminar">❌</Link></td> 
     </>
   )
 }

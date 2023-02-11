@@ -7,12 +7,12 @@ import { UserContext } from "./userContext";
 import Header from './Layout/Header';
 import Footer from "./Layout/Footer";
 import About from "./About";
-import PlaceList from "./Places/PlacesList";
+import PlacesList from "./Places/PlacesList";
 import Place from "./Places/Place";
-import PlaceAdd from "./Places/PlacesAdd";
-import PlaceEdit from "./Places/PlacesEdit";
-import PlaceGrid from "./Places/PlacesGrid";
-import PlaceMenu from "./Places/PlacesMenu";
+import PlacesAdd from "./Places/PlacesAdd";
+import PlacesEdit from "./Places/PlacesEdit";
+import PlacesGrid from "./Places/PlacesGrid";
+import PlacesMenu from "./Places/PlacesMenu";
 import Post from "./Posts/Post";
 import PostsList from "./Posts/PostsList";
 import PostsGrid from "./Posts/PostsGrid";
@@ -34,17 +34,17 @@ export default function App() {
             <Header />
             <Routes>
               <Route path='*' element={<NotFound />} />
-              <Route path="/" element={<PostsList />} />
+              <Route path="/" element={<> <PostsMenu/> <PostsList /> </>} />
               <Route path="/posts" element={<> <PostsMenu/> <PostsList /> </>} />
               <Route path="/posts/grid" element={<> <PostsMenu/> <PostsGrid /> </>} />
               <Route path="/posts/add" element={<> <PostsMenu/> <PostsAdd /> </>} />
               <Route path="/posts/:id" element={<> <PostsMenu/> <Post/> </>} />
               <Route path="/posts/edit/:id" element={<> <PostsMenu/><PostsEdit /> </>} />
-              <Route path="/places" element={<> <PlaceMenu/><PlaceList/> </>} />
-              <Route path="/places/add" element={<> <PlaceMenu/><PlaceAdd/> </>} />
-              <Route path="/places/grid" element={<> <PlaceMenu/><PlaceGrid /> </>} />
-              <Route path="/places/:id" element={<> <PlaceMenu/><Place/> </>} />
-              <Route path="/places/edit/:id" element={<> <PlaceMenu/><PlaceEdit/> </>} />
+              <Route path="/places" element={<> <PlacesMenu/><PlacesList/> </>} />
+              <Route path="/places/add" element={<> <PlacesMenu/><PlacesAdd/> </>} />
+              <Route path="/places/grid" element={<> <PlacesMenu/><PlacesGrid /> </>} />
+              <Route path="/places/:id" element={<> <PlacesMenu/><Place/> </>} />
+              <Route path="/places/edit/:id" element={<> <PlacesMenu/><PlacesEdit/> </>} />
               <Route path="/about" element={<About />} />
             </Routes>
             <Footer />

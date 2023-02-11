@@ -7,7 +7,8 @@ import PlaceList from './PlaceList';
 export default function PlacesList() {
   let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
   let [ places, setPlaces ] = useState([]);
-  
+  let [refresh,setRefresh] = useState(false);
+
   const getPlaces = async (e) => {
     try {
       const data = await fetch("https://backend.insjoaquimmir.cat/api/places", {
@@ -33,7 +34,30 @@ export default function PlacesList() {
 
   useEffect(()=>{
     getPlaces();
-  }, [])
+  }, [refresh])
+
+  const deletePlace = async (e, id) => {
+    try {
+      const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id, {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": 'Bearer '  + authToken,
+        },
+        method: "DELETE",
+    })
+      const resposta = await data.json();
+      console.log(resposta);
+      if (resposta.success == true){
+        setRefresh(!refresh);
+      }else{
+        console.log("Error eliminando place");
+        console.log(resposta.message);
+      }            
+    } catch {
+      console.log("Error");
+    }
+  };
 
   return(
     <>
@@ -52,19 +76,13 @@ export default function PlacesList() {
                       <th><h1>Visibilitat</h1></th>
                       <th><h1>Autor</h1></th>
                       <th><h1>Favorits</h1></th>
-                      <div>
-                      {isLoggedIn ? (
-                        <LogoutButton onClick={this.handleLogoutClick} />
-                      ) : (
-                        <LoginButton onClick={this.handleLoginClick} />
-                      )}
-                    </div>
                       <th colSpan="3"><h1>Accions</h1></th>
                   </tr>
               </thead>
               <tbody>
                   {places.map((place) => (  
-                      (<tr key={place.id}><PlaceList place={place} /></tr>) 
+                    (place.visibility.name == 'public' || usuari == place.author.email) && 
+                    (<tr key={place.id}><PlaceList place={place} deletePlace={deletePlace}/></tr>) 
                   ))} 
               </tbody>
           </table>

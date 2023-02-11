@@ -21,6 +21,7 @@
     width: 95% !important;
     margin: 0 auto !important;
     display: table !important;
+    margin-bottom: 80px !important;
 }
 .tabla td, .tabla th {
     padding-bottom: 2% !important;
@@ -66,4 +67,16 @@
 }
 .description{
     width: 40% !important;
+}
+.delete{
+    background: transparent;
+    border: none;
+    padding: 0 !important;
+    cursor: pointer;
+}
+.iconos{
+    color: white !important;
+}
+.iconos:hover{
+    color: rgb(245, 100, 100) !important;
 }

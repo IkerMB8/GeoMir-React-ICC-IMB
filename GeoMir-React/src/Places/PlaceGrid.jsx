@@ -1,7 +1,10 @@
 import React from 'react';
 import "./PlaceGrid.css";
 import { Link } from 'react-router-dom';
-export const PlaceGrid = ({place}) => {    
+import { UserContext } from "../userContext";
+import { useContext } from "react";
+export const PlaceGrid = ({place, deletePlace}) => {    
+    let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
     return(
         <>
             <div className="topp">
@@ -9,6 +12,11 @@ export const PlaceGrid = ({place}) => {
                     <div className="perf">
                         <img src={"https://backend.insjoaquimmir.cat/storage/" + place.file.filepath} alt={place.name}></img><p>@{place.author.name}</p>
                     </div>
+                    {usuari == place.author.email &&
+                    <div className='funciones'>
+                        <Link className="iconos" to={"/places/edit/"+place.id} title="Editar"><i className="bi bi-pencil-square"></i></Link> 
+                        <button onClick={(e) => {deletePlace(e, place.id);}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button>
+                    </div>}
                 </div>
                 <div>
                     <h5>{ place.name }</h5>
@@ -28,7 +36,7 @@ export const PlaceGrid = ({place}) => {
                 </div>
             </div>
             <div>
-                <p>{ place.favorites_count } favs</p>
+                <p className='nomargen'>{ place.favorites_count } favs</p>
                 <p>{ place.description }</p>
             </div>
             <div className="review">

@@ -5,8 +5,9 @@ import "./PlaceGrid.css";
 import PlaceGrid from './PlaceGrid';
 
 export default function PlacesGrid() {
-  let { authToken, setAuthToken } = useContext(UserContext);
+  let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
   let [ places, setPlaces ] = useState([]);
+  let [refresh,setRefresh] = useState(false);
   
   const getPlaces = async (e) => {
     try {
@@ -33,14 +34,37 @@ export default function PlacesGrid() {
 
   useEffect(()=>{
     getPlaces();
-  }, [])
+  }, [refresh])
 
+  const deletePlace = async (e, id) => {
+    try {
+      const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id, {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": 'Bearer '  + authToken,
+        },
+        method: "DELETE",
+    })
+      const resposta = await data.json();
+      console.log(resposta);
+      if (resposta.success == true){
+        setRefresh(!refresh);
+      }else{
+        console.log("Error eliminando place");
+        console.log(resposta.message);
+      }            
+    } catch {
+      console.log("Error");
+    }
+  };
   return(
     <>
       <div className="contenido">
         <div className="posts">
             {places.map((place) => (  
-                (<div className='post' key={place.id}><PlaceGrid place={place} /></div>) 
+                (place.visibility.name == 'public' || usuari == place.author.email) && 
+                (<div className='post' key={place.id}><PlaceGrid place={place} deletePlace={deletePlace}/></div>) 
             ))} 
         </div>
       </div>
