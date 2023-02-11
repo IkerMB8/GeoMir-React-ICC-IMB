@@ -16,6 +16,21 @@
     margin-bottom: 30px;
     background-color: white;
 }
+
+.funciones{
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.funciones .iconos{
+    color: black !important;
+    font-size: 20px !important;
+}
+.funciones .iconos:hover{
+    color: red !important;
+}
+
 .topp{
     height: auto;
     display: grid;

@@ -1,6 +1,6 @@
 .boton {
     background-color: #ffffff;
-    color: black;
+    color: black !important;
     padding: 8px 25px;
     text-align: center;
     text-decoration: none;

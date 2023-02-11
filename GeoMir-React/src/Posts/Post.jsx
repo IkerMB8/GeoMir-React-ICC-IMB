@@ -3,8 +3,10 @@ import { UserContext } from "../userContext";
 import { useParams, Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import "./PostGrid.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Post() {
+    let navigate = useNavigate();
     const { id } = useParams();
     let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
     let [ post, setPost ] = useState({
@@ -33,6 +35,7 @@ export default function Post() {
             console.log(post); 
         }else{
             console.log("La resposta no ha triomfat");
+            navigate("/posts");
         }            
         } catch {
         console.log("Error");
@@ -42,6 +45,29 @@ export default function Post() {
     useEffect(()=>{
         getPost();
     }, [])
+
+    const deletePost = async (e, id) => {
+        try {
+          const data = await fetch("https://backend.insjoaquimmir.cat/api/posts/"+id, {
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+              "Authorization": 'Bearer '  + authToken,
+            },
+            method: "DELETE",
+        })
+          const resposta = await data.json();
+          console.log(resposta);
+          if (resposta.success == true){
+            navigate("/posts");
+          }else{
+            console.log("Error eliminando post");
+            console.log(resposta.message);
+          }            
+        } catch {
+          console.log("Error");
+        }
+    };    
     return (
     <>
     <div className="contenido">
@@ -52,6 +78,11 @@ export default function Post() {
                     <div className="perf">
                     <img src={"https://backend.insjoaquimmir.cat/storage/" + post.file.filepath} alt={post.name}></img><p>@{post.author.name}</p>
                     </div>
+                    {usuari == post.author.email &&
+                    <div className='funciones'>
+                        <Link className="iconos" to={"/posts/edit/"+post.id} title="Editar"><i className="bi bi-pencil-square"></i></Link> 
+                        <button onClick={(e) => {deletePost(e, post.id);}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button>
+                    </div>}
                 </div>
                 <div>
                     <h5>{ post.name }</h5>

@@ -1,9 +1,10 @@
 import React from 'react'
 import "./PostGrid.css";
 import { Link } from 'react-router-dom';
-
-export const PostGrid = ({post}) => {
-  
+import { UserContext } from "../userContext";
+import { useContext } from "react";    
+export const PostGrid = ({post, deletePost}) => {
+  let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
   return (
     <>
       <div className="topp">
@@ -11,9 +12,14 @@ export const PostGrid = ({post}) => {
           <div className="perf">
             <img src={"https://backend.insjoaquimmir.cat/storage/" + post.file.filepath} alt={post.name}></img><p>@{post.author.name}</p>
           </div>
+          {usuari == post.author.email &&
+          <div className='funciones'>
+            <Link className="iconos" to={"/posts/edit/"+post.id} title="Editar"><i className="bi bi-pencil-square"></i></Link> 
+            <button onClick={(e) => {deletePost(e, post.id);}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button>
+          </div>}
         </div>
         <div>
-          <h5>{ post.name }</h5>
+          <h5>{ post.body }</h5>
         </div>
       </div>
       <div>

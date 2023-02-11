@@ -7,8 +7,9 @@ import "./PostsList.css";
 import PostList from "./PostList";
 
 const PostsList = () => {
-  let [ posts, setPosts] = useState([]);
-  let {authToken, setAuthToken}=useContext(UserContext)
+  let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
+  let [ posts, setPosts ] = useState([]);
+  let [refresh,setRefresh] = useState(false);
 
 
   const getPosts = async () => {
@@ -27,23 +28,40 @@ const PostsList = () => {
         if (resposta.success == true )
         {
           setPosts(resposta.data);
-          setAuthToken(authToken);  
-          console.log(posts); 
-
-         
+          console.log(posts);          
         }else{
           console.log("La resposta no ha triomfat");
-  
         }            
-        
       } catch {
         console.log("Error");
-        console.log("catch");
       }
     };
     useEffect(()=>{
       getPosts();
-  }, [])
+  }, [refresh])
+
+  const deletePost = async (e, id) => {
+    try {
+      const data = await fetch("https://backend.insjoaquimmir.cat/api/posts/"+id, {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": 'Bearer '  + authToken,
+        },
+        method: "DELETE",
+    })
+      const resposta = await data.json();
+      console.log(resposta);
+      if (resposta.success == true){
+        setRefresh(!refresh);
+      }else{
+        console.log("Error eliminando post");
+        console.log(resposta.message);
+      }            
+    } catch {
+      console.log("Error");
+    }
+  };
 
   return (
     <div className='container'>
@@ -62,7 +80,8 @@ const PostsList = () => {
           </thead>
           <tbody>
             {posts.map((post) => (
-              (<tr key={post.id}><PostList post={post}/></tr>)
+              (post.visibility.name == 'public' || usuari == post.author.email) && 
+              (<tr key={post.id}><PostList post={post} deletePost={deletePost}/></tr>)
             ))}
           </tbody>
 
