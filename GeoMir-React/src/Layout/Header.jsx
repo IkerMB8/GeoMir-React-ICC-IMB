@@ -4,31 +4,38 @@ import { UserContext } from '../userContext';
 import { useState, useContext, useEffect } from 'react';
 
 export default function Header() {
-  let { authToken, setAuthToken } = useContext(UserContext)
-  let [ nom, setNom ] = useState("");
   let [ roles, setRoles ] = useState([]);
+  let [ nom, setNom ] = useState("");
+  let { authToken, setAuthToken } = useContext(UserContext);
 
-  useEffect(async () => {
+  const getUser = async (e) => {
     try {
       const data = await fetch("https://backend.insjoaquimmir.cat/api/user", {
         headers: {
-          Accept: "application/json",
+          "Accept": "application/json",
           "Content-Type": "application/json",
-          'Authorization': 'Bearer '  + authToken,
-      
+          "Authorization": 'Bearer '  + authToken,
         },
         method: "GET",
       })
- 
       const resposta = await data.json();
-      if (resposta.success === true) console.log(resposta.user), console.log(resposta.roles), setNom(resposta.user.name), setRoles(resposta.roles);
+      if (resposta.success === true) {
+        console.log(resposta.user);
+        console.log(resposta.roles);
+        setNom(resposta.user.name);
+        setRoles(resposta.roles);
+      }else{
+        console.log("La resposta no ha triomfat");
+      }            
     } catch {
       console.log("Error");
-      //alert("catch");
     }
-  }, []);
+  };
 
-  
+  useEffect(()=>{
+    getUser();
+  }, [])
+
   const logout = async (e) => {
     e.preventDefault();
   
@@ -38,71 +45,21 @@ export default function Header() {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          'Authorization': 'Bearer '  + authToken,
+          "Authorization": 'Bearer '  + authToken,
       
         },
         method: "POST",
       })
 
       const resposta = await data.json();
-      if (resposta.success === true) console.log(resposta.authToken), setAuthToken('');
+      if (resposta.success === true){
+        console.log(resposta.authToken);
+        setAuthToken('');
+      } 
     } catch {
       console.log("Error");
-      //alert("catch");
     }
   };
-  // useEffect(() => {
-  //   fetch("https://backend.insjoaquimmir.cat/api/user", {
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //       'Authorization': 'Bearer '  + authToken,
-
-  //     },
-  //     method: "GET",
-  //   })
-  //   .then((data) => data.json())
-  //   .then((resposta) => {
-  //     console.log(resposta);
-  //     if (resposta.success === true) {
-  //       console.log(resposta.user);
-  //       console.log(resposta.roles);
-  //       setNom(resposta.user.name);
-  //       setRoles(resposta.roles);
-  //     }
-  //   })
-  //   .catch((data) => {
-  //     console.log(data);
-  //     console.log("Catchch");
-  //   });  
-  // }, [])
-
-  // const logout = (e) => {
-  //   e.preventDefault();
-  //   console.log("Comprovant credencials....");
-  //   // Enviam dades a l'aPI i recollim resultat
-  //   fetch("https://backend.insjoaquimmir.cat/api/logout", {
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //       'Authorization': 'Bearer '  + authToken,
-
-  //     },
-  //     method: "POST",
-  //   })
-  //     .then((data) => data.json())
-  //     .then((resposta) => {
-  //      console.log(resposta);
-  //      if (resposta.success === true) {
-  //        console.log(resposta.authToken);
-  //        setAuthToken('')
-  //      }
-  //    })
-  //     .catch((data) => {
-  //       console.log(data);
-  //       console.log("Catchch");
-  //    });  
-  //  };
   
   return (
     <>

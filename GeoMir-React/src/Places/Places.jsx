@@ -1,5 +1,5 @@
+import React from 'react';
+
 export default function Places() {
-    return <div className="contenido">
-              <h1>Places</h1>
-            </div>;
+    return <div className="contenido"><h1>Places</h1></div>;
   }

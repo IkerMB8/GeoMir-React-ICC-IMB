@@ -7,6 +7,8 @@ export default function Register({ setCanvi }) {
   let [formulario, setFormulari] = useState({});
   let [error, setError] = useState("");
   let {authToken, setAuthToken}=useContext(UserContext);
+  let {user, setUser} = useContext(UserContext);
+
   const handleChange = (e) => {
     e.preventDefault();
 
@@ -15,43 +17,7 @@ export default function Register({ setCanvi }) {
       [e.target.name]: e.target.value
     });
   };
-  // const handleRegister = (e) => {
-  //   e.preventDefault();
 
-  //   let { name, email, password, password2 } = formulario;
-  //   alert("He enviat les Dades:  " + name +"/" +email +"/" + password + "/" +password2);
-  //   if (password2 !== password) {
-  //     alert("Els passwords han de coincidir");
-  //     return false;
-  //   }
-
-  //   fetch("https://backend.insjoaquimmir.cat/api/register", {
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json"
-  //     },
-  //     method: "POST",
-  //     // Si els noms i les variables coincideix, podem simplificar
-  //     body: JSON.stringify({ name, email, password })
-  //   })
-  //   .then((data) => data.json())
-  //   .then((resposta) => {
-  //     console.log(resposta);
-  //     if (resposta.success === true) {
-  //       alert(resposta.authToken);
-  //       setAuthToken(resposta.authToken)
-  //     }
-  //     else{
-  //       setError(resposta.message);
-  //     }
-  //   })
-  //   .catch((data) => {
-  //     console.log(data);
-  //     alert("Catchch");
-  //   });
-
-  //   alert("He enviat les Dades:  " + email + "/" + password);
-  // };
   const handleRegister = async (e) => {
     e.preventDefault();
     let { name, email, password, password2 } = formulario;
@@ -60,7 +26,7 @@ export default function Register({ setCanvi }) {
     try {
       const data = await fetch("https://backend.insjoaquimmir.cat/api/register", {
         headers: {
-          Accept: "application/json",
+          "Accept": "application/json",
           "Content-Type": "application/json"
         },
         method: "POST",
@@ -69,16 +35,19 @@ export default function Register({ setCanvi }) {
       })
 
       const resposta = await data.json();
-      if (resposta.success === true) alert(resposta.authToken), setAuthToken(resposta.authToken);
-      else setError(resposta.message);
-
-      alert("He enviat les Dades:  " + email + "/" + password);
+      if (resposta.success === true){
+        alert(resposta.authToken);
+        setAuthToken(resposta.authToken);
+        setUser(email);
+      }else{
+        setError(resposta.message);
+      } 
+      // alert("He enviat les Dades:  " + email + "/" + password);
     } catch {
       console.log("Error");
       //alert("catch");
     }
   };
-
 
   return (
     <>

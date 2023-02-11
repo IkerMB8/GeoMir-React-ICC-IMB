@@ -1,0 +1,69 @@
+.contenedor {
+    margin-top: 20px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+.tabla th h1 {
+    font-weight: bold !important;
+    font-size: 1em !important;
+    text-align: center !important;
+    color: #185875 !important;
+}
+.tabla td {
+    font-weight: normal !important;
+    font-size: 1em !important;
+    box-shadow: 0 2px 2px -2px #0E1119 !important;
+}
+.tabla {
+    text-align: left !important;
+    overflow: hidden !important;
+    width: 95% !important;
+    margin: 0 auto !important;
+    display: table !important;
+}
+.tabla td, .tabla th {
+    padding-bottom: 2% !important;
+    padding-top: 2% !important;
+    text-align: center !important;
+}
+/* Background-color of the odd rows */
+.tabla tr:nth-child(odd) {
+    background-color: #323C50 !important;
+}
+/* Background-color of the even rows */
+.tabla tr:nth-child(even) {
+    background-color: #2C3446 !important;
+}
+.tabla th {
+    background-color: #1F2739 !important;
+}
+.tabla td:first-child { 
+    color: #FB667A !important; 
+    padding-right: 10px !important;
+}
+.tabla tr:hover {
+    background-color: #464A52 !important;
+    box-shadow: 0 6px 6px -6px #0E1119 !important;
+}
+.tabla td:hover {
+    background-color: #FFF842 !important;
+    color: #403E10 !important;
+    font-weight: bold !important;
+    box-shadow: #7F7C21 -1px 1px, #7F7C21 -2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px !important;
+    transform: translate3d(6px, -6px, 0) !important;
+    transition-delay: 0s !important;
+    transition-duration: 0.4s !important;
+    transition-property: all !important;
+    transition-timing-function: line !important;
+}   
+
+.num{
+    width: 5% !important;
+}
+.name{
+    width: 12% !important;
+}
+.description{
+    width: 40% !important;
+}

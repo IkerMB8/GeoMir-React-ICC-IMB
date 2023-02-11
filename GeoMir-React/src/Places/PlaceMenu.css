@@ -1,0 +1,15 @@
+.navPlace{
+    background-color: #22203f;
+}
+
+.navLink{
+    float: left;
+    padding: 15px;
+    background-color: transparent;
+    text-decoration: none;
+}
+.navLink:hover{
+    background-color: #1A1B30;
+    text-decoration: none;
+    color: #4371f7;
+  }
