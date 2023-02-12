@@ -1,7 +1,6 @@
 import "./style.css";
-import React from 'react'
+import React, { useState } from 'react'
 import LoginRegister  from './auth/LoginRegister';
-import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { UserContext } from "./userContext";
 import Header from './Layout/Header';
@@ -13,6 +12,7 @@ import PlacesAdd from "./Places/PlacesAdd";
 import PlacesEdit from "./Places/PlacesEdit";
 import PlacesGrid from "./Places/PlacesGrid";
 import PlacesMenu from "./Places/PlacesMenu";
+import ReviewsList from "./Places/Reviews/ReviewsList";
 import Post from "./Posts/Post";
 import PostsList from "./Posts/PostsList";
 import PostsGrid from "./Posts/PostsGrid";
@@ -45,7 +45,8 @@ export default function App() {
               <Route path="/places/grid" element={<> <PlacesMenu/><PlacesGrid /> </>} />
               <Route path="/places/:id" element={<> <PlacesMenu/><Place/> </>} />
               <Route path="/places/edit/:id" element={<> <PlacesMenu/><PlacesEdit/> </>} />
-              <Route path="/about" element={<About />} />
+              <Route path="/places/:id/reviews" element={<> <PlacesMenu/><ReviewsList/> </>} />
+              {/* <Route path="/about" element={<About />} /> */}
             </Routes>
             <Footer />
           </>

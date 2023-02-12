@@ -20,7 +20,9 @@ export default function Place() {
     reviews_count:"",
     file:{filepath:""}
   });
-  
+  let [ favorito, setFavorito ] = useState(false);
+  let [refresh,setRefresh] = useState(false);
+
   const getPlace = async () => {
     try {
       const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id, {
@@ -47,7 +49,10 @@ export default function Place() {
 
   useEffect(()=>{
     getPlace();
-  }, [])
+  }, [refresh])
+  useEffect(()=>{
+    comprobarFavorito()
+  }, []);
 
   const deletePlace = async (e, id) => {
     try {
@@ -67,6 +72,76 @@ export default function Place() {
         console.log("Error eliminando place");
         console.log(resposta.message);
       }            
+    } catch {
+      console.log("Error");
+    }
+  };
+
+  const comprobarFavorito = async (e) => {
+    try {
+      const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id+"/favorites", {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": 'Bearer '  + authToken,
+        },
+        method: "POST",
+      })
+      const resposta = await data.json();
+      console.log(resposta);
+      if (resposta.success == true){
+        setFavorito(false);
+        unfavorite();
+      }else{
+        setFavorito(true);
+      }            
+    } catch {
+      console.log("Error");
+    }
+  };
+
+  const favorite = async (e) => {
+    try {
+      const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id+"/favorites", {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": 'Bearer '  + authToken,
+        },
+        method: "POST",
+      })
+      const resposta = await data.json();
+      console.log(resposta);
+      if (resposta.success == true){
+        setFavorito(true);
+      }else{
+        console.log("Ya tienes en favoritos este lugar");
+        setFavorito(false);
+      }            
+      setRefresh(!refresh);
+    } catch {
+      console.log("Error");
+    }
+  };
+
+  const unfavorite = async (e) => {
+    try {
+      const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id+"/favorites", {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": 'Bearer '  + authToken,
+        },
+        method: "DELETE",
+      })
+      const resposta = await data.json();
+      console.log(resposta);
+      if (resposta.success == true){
+        setFavorito(false);
+      }else{
+        console.log("No tienes en favoritos este lugar");
+      }            
+      setRefresh(!refresh);
     } catch {
       console.log("Error");
     }
@@ -97,8 +172,11 @@ export default function Place() {
             </div>
             <div className="funct">
                 <div className="functizq">
-                    <i className="bi bi-star"></i>
-                    <i className="bi bi-chat"></i>
+                    {favorito == false &&
+                      <button onClick={(e) => {favorite(e, place.id);}} className="delete botonfav"><i className="bi bi-star"></i></button>}
+                    {favorito == true &&
+                      <button onClick={(e) => {unfavorite(e, place.id);}} className="delete botonfav amarillo"><i className="bi bi-star-fill"></i></button>}
+                    <Link to={"/places/"+place.id+"/reviews"}><i className="bi bi-chat"></i></Link>
                     <i className="bi bi-share"></i>
                 </div>
                 <div className="functder">

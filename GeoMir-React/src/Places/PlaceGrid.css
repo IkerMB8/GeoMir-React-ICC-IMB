@@ -91,6 +91,9 @@
     display: flex;
     font-size: 2em;
 }
+.functizq a{
+    color: #606468 !important;
+}
 .functizq *{
     margin-right: 5px;
 }
@@ -143,4 +146,12 @@
 }
 .nomargen{
     margin: 0 !important;
+}
+.botonfav{
+    font-size: 1.1em;
+    color: #606468 !important;
+}
+.amarillo{
+    color: yellow !important;
+    -webkit-text-stroke: 2px black;
 }

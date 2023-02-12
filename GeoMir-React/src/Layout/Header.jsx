@@ -68,7 +68,7 @@ export default function Header() {
 
         </div>
         <div className="center">
-          <Link to="/about">About </Link>
+          {/* <Link to="/about">About </Link> */}
           <Link to="/places">Places </Link>
           <Link to="/posts">Posts </Link>
         </div>

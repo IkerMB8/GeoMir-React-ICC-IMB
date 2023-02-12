@@ -6,8 +6,7 @@ export default function Register({ setCanvi }) {
   
   let [formulario, setFormulari] = useState({});
   let [error, setError] = useState("");
-  let {authToken, setAuthToken}=useContext(UserContext);
-  let {user, setUser} = useContext(UserContext);
+  let {authToken, setAuthToken, usuari, setUsuari}=useContext(UserContext);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -38,7 +37,7 @@ export default function Register({ setCanvi }) {
       if (resposta.success === true){
         alert(resposta.authToken);
         setAuthToken(resposta.authToken);
-        setUser(email);
+        setUsuari(email);
       }else{
         setError(resposta.message);
       } 
