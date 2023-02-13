@@ -75,7 +75,7 @@ const PostsList = () => {
               <th><h1>Longitude</h1></th>
               <th><h1>Visibilty</h1></th>
               <th><h1>Likes</h1></th>
-              <th colspan="3"><h1>Accions</h1></th>
+              <th colSpan="3"><h1>Accions</h1></th>
             </tr>
           </thead>
           <tbody>
