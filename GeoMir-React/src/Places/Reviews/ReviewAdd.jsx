@@ -58,7 +58,7 @@ export const ReviewAdd = ({refresh, setRefresh}) => {
             <h1>Add Review</h1>
             <form method='POST' className="material-form">
               <div className="material-form__container">
-                <input className="material-form__input" type="text" placeholder=" " id="review" name="review" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ]{2,100}" maxLength="100" value={formulari.name} onChange={handleChange}/>
+                <input className="material-form__input" type="text" placeholder=" " id="review" name="review" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{2,100}" maxLength="100" value={formulari.name} onChange={handleChange}/>
                 <label className="material-form__label" htmlFor="review">Review</label>
                 <div className="material-form__focus-animation"></div>
                 <p className="material-form__error">Review no válida</p>

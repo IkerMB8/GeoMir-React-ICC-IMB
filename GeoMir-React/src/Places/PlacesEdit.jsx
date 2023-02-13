@@ -120,13 +120,13 @@ export default function PlacesEdit() {
             <h1>PlaceEdit</h1>
             <form method='POST' className="material-form">
               <div className="material-form__container">
-                <input className="material-form__input" type="text" placeholder=" " id="name" name="name" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ]{4,40}" maxLength="40" value={formulari.name} onChange={handleChange}/>
+                <input className="material-form__input" type="text" placeholder=" " id="name" name="name" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{4,40}" maxLength="40" value={formulari.name} onChange={handleChange}/>
                 <label className="material-form__label" htmlFor="name">Nombre</label>
                 <div className="material-form__focus-animation"></div>
                 <p className="material-form__error">Nombre no válido</p>
               </div>
               <div className="material-form__container">
-                <input className="material-form__input" type="text" placeholder=" " id="description" name="description" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9]{4,110}" maxLength="110" value={formulari.description} onChange={handleChange}/>
+                <input className="material-form__input" type="text" placeholder=" " id="description" name="description" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{4,110}" maxLength="110" value={formulari.description} onChange={handleChange}/>
                 <label className="material-form__label" htmlFor="description">Descripción</label>
                 <div className="material-form__focus-animation"></div>
                 <p className="material-form__error">Descripción no válido</p>

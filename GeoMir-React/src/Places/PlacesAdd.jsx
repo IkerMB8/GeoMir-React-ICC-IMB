@@ -2,6 +2,9 @@ import React, { useEffect, useState, useContext } from 'react';
 import "./PlacesAdd.css";
 import { UserContext } from '../userContext';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function PlacesAdd() {
   let [formulari, setFormulari] = useState({});
@@ -9,6 +12,7 @@ export default function PlacesAdd() {
   let [success, setSuccess] = useState("");
   let {authToken, setAuthToken}=useContext(UserContext);
   let {name,description,upload,latitude,longitude,visibility=1}=formulari;
+  let navigate = useNavigate();
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -53,6 +57,7 @@ export default function PlacesAdd() {
         console.log(resposta);
         // alert("Place creado correctamente");
         setSuccess("Place Creado Correctamente");
+        navigate("/places");
         setFormulari({});
       }else{
         console.log(formulari)
@@ -86,13 +91,13 @@ export default function PlacesAdd() {
             <h1>PlaceAdd</h1>
             <form method='POST' className="material-form">
               <div className="material-form__container">
-                <input className="material-form__input" type="text" placeholder=" " id="name" name="name" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ]{4,40}" maxLength="40" value={formulari.name} onChange={handleChange}/>
+                <input className="material-form__input" type="text" placeholder=" " id="name" name="name" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{4,40}" maxLength="40" value={formulari.name} onChange={handleChange}/>
                 <label className="material-form__label" htmlFor="name">Nombre</label>
                 <div className="material-form__focus-animation"></div>
                 <p className="material-form__error">Nombre no válido</p>
               </div>
               <div className="material-form__container">
-                <input className="material-form__input" type="text" placeholder=" " id="description" name="description" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9]{4,110}" maxLength="110" value={formulari.description} onChange={handleChange}/>
+                <input className="material-form__input" type="text" placeholder=" " id="description" name="description" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{4,110}" maxLength="110" value={formulari.description} onChange={handleChange}/>
                 <label className="material-form__label" htmlFor="description">Descripción</label>
                 <div className="material-form__focus-animation"></div>
                 <p className="material-form__error">Descripción no válido</p>

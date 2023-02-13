@@ -29,7 +29,7 @@ export default function Login({ setCanvi }) {
         setError(resposta.message);
         // else alert("La resposta no ha triomfat");
       }
-      alert("He enviat les Dades:  " + correu + "/" + password);
+      // alert("He enviat les Dades:  " + correu + "/" + password);
     } catch {
       console.log("Error");
       //alert("catch");
