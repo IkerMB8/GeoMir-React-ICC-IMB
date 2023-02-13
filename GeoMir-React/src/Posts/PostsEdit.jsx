@@ -118,13 +118,13 @@ export default function PostsEdit(){
     <h1>PostEdit</h1>
     <form method='POST' className="material-form">
       <div className="material-form__container">
-        <input className="material-form__input" name="body" type="text" placeholder=" " id="body" pattern="[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{10,40}" maxlength="40" value={formulari.body} onChange={handleChange}/>
+        <input className="material-form__input" name="body" type="text" placeholder=" " id="body" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{10,40}" maxlength="40" value={formulari.body} onChange={handleChange}/>
         <label className="material-form__label" htmlFor="body">Body</label>
         <div className="material-form__focus-animation"></div>
         <p className="material-form__error">Body no válido</p>
       </div>
       <div className="material-form__container">
-        <input className="material-form__input" name="upload" type="file" placeholder=" " id="file" pattern="[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{10,40}" maxlength="50" onChange={handleChange}/>
+        <input className="material-form__input" name="upload" type="file" placeholder=" " id="file" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{10,40}" maxlength="50" onChange={handleChange}/>
         <label className="material-form__label" htmlFor="upload">File</label>
         <div className="material-form__focus-animation"></div>
         <p className="material-form__error">File no válido</p>

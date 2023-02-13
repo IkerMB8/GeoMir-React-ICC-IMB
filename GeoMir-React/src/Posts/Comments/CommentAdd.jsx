@@ -58,7 +58,7 @@ export const CommentAdd = ({refresh, setRefresh}) => {
             <h1>Add Comment</h1>
             <form method='POST' className="material-form">
               <div className="material-form__container">
-                <input className="material-form__input" type="text" placeholder=" " id="comment" name="comment" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ]{2,100}" maxLength="100" value={formulari.name} onChange={handleChange}/>
+                <input className="material-form__input" type="text" placeholder=" " id="comment" name="comment" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{2,100}" maxLength="100" value={formulari.name} onChange={handleChange}/>
                 <label className="material-form__label" htmlFor="comment">Comment</label>
                 <div className="material-form__focus-animation"></div>
                 <p className="material-form__error">Comment no válido</p>

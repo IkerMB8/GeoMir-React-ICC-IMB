@@ -29,7 +29,7 @@
 
 .material-form {
     display: block;
-    width: 300px;
+    width: 390px;
     padding: 50px 40px;
     background-color: transparent;
     font-size: 16px;
@@ -57,7 +57,7 @@
 .material-form__input {
     width: 100%;
     padding: 10px 0;
-    color: #ccc;
+    color: white !important;
     font-weight: bold;
     box-shadow: 0 -2px #1A1830 inset;
     border: none;
