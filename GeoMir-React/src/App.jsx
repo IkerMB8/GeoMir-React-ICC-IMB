@@ -19,6 +19,7 @@ import PostsGrid from "./Posts/PostsGrid";
 import PostsAdd from "./Posts/PostsAdd";
 import PostsEdit from "./Posts/PostsEdit";
 import PostsMenu from "./Posts/PostsMenu";
+import CommentsList from "./Posts/Comments/CommentsList";
 import NotFound from "./NotFound";
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
               <Route path="/posts/add" element={<> <PostsMenu/> <PostsAdd /> </>} />
               <Route path="/posts/:id" element={<> <PostsMenu/> <Post/> </>} />
               <Route path="/posts/edit/:id" element={<> <PostsMenu/><PostsEdit /> </>} />
+              <Route path="/posts/:id/comments" element={<> <PostsMenu/><CommentsList/> </>} />
               <Route path="/places" element={<> <PlacesMenu/><PlacesList/> </>} />
               <Route path="/places/add" element={<> <PlacesMenu/><PlacesAdd/> </>} />
               <Route path="/places/grid" element={<> <PlacesMenu/><PlacesGrid /> </>} />

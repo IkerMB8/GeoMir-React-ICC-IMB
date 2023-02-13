@@ -28,7 +28,7 @@ export const PostGrid = ({post, deletePost}) => {
       <div className="funct">
         <div className="functizq">
           <i className="bi bi-heart"></i>
-          <i className="bi bi-chat"></i>
+          <Link to={"/posts/"+post.id+"/comments"}><i className="bi bi-chat"></i></Link>
           <i className="bi bi-share"></i>
         </div>
         <div className="functder">

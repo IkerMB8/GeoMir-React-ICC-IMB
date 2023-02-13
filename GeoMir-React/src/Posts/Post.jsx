@@ -17,6 +17,9 @@ export default function Post() {
         likes_count:"",
         file:{filepath:""}
     });
+    let [like, setLike ] = useState(false);
+    let [refresh,setRefresh] = useState(false);
+
     
     const getPost = async () => {
         try {
@@ -44,7 +47,10 @@ export default function Post() {
 
     useEffect(()=>{
         getPost();
-    }, [])
+    }, [refresh])
+    useEffect(()=>{
+        comprobarLike()
+    }, []);
 
     const deletePost = async (e, id) => {
         try {
@@ -67,7 +73,77 @@ export default function Post() {
         } catch {
           console.log("Error");
         }
-    };    
+    };
+    
+    const comprobarLike = async (e) => {
+        try {
+        const data = await fetch("https://backend.insjoaquimmir.cat/api/posts/"+id+"/likes", {
+            headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": 'Bearer '  + authToken,
+            },
+            method: "POST",
+        })
+        const resposta = await data.json();
+        console.log(resposta);
+        if (resposta.success == true){
+            setLike(false);
+            unlike();
+        }else{
+            setLike(true);
+        }            
+        } catch {
+        console.log("Error");
+        }
+    };
+
+    const likePost = async (e) => {
+        try {
+        const data = await fetch("https://backend.insjoaquimmir.cat/api/posts/"+id+"/likes", {
+            headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": 'Bearer '  + authToken,
+            },
+            method: "POST",
+        })
+        const resposta = await data.json();
+        console.log(resposta);
+        if (resposta.success == true){
+            setLike(true);
+        }else{
+            console.log("Ya has dado like a este post");
+            setLike(false);
+        }            
+        setRefresh(!refresh);
+        } catch {
+        console.log("Error");
+        }
+    };
+
+    const unlike = async (e) => {
+        try {
+        const data = await fetch("https://backend.insjoaquimmir.cat/api/posts/"+id+"/likes", {
+            headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": 'Bearer '  + authToken,
+            },
+            method: "DELETE",
+        })
+        const resposta = await data.json();
+        console.log(resposta);
+        if (resposta.success == true){
+            setLike(false);
+        }else{
+            console.log("No le has dado like a este post");
+        }            
+        setRefresh(!refresh);
+        } catch {
+        console.log("Error");
+        }
+    };
     return (
     <>
     <div className="contenido">
@@ -93,8 +169,11 @@ export default function Post() {
                 </div>
                 <div className="funct">
                     <div className="functizq">
-                        <i className="bi bi-heart"></i>
-                        <i className="bi bi-chat"></i>
+                        {like == false &&
+                        <button onClick={(e) => {likePost(e, post.id);}} className="delete botonlike"><i className="bi bi-heart"></i></button>}
+                        {like == true &&
+                        <button onClick={(e) => {unlike(e, post.id);}} className="delete botonlike rojo"><i className="bi bi-heart-fill"></i></button>}
+                        <Link to={"/posts/"+post.id+"/comments"}><i className="bi bi-chat"></i></Link>                        
                         <i className="bi bi-share"></i>
                     </div>
                     <div className="functder">
