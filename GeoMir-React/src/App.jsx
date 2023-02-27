@@ -1,5 +1,5 @@
 import "./style.css";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LoginRegister  from './auth/LoginRegister';
 import { Routes, Route } from "react-router-dom";
 import { UserContext } from "./userContext";
@@ -23,7 +23,7 @@ import CommentsList from "./Posts/Comments/CommentsList";
 import NotFound from "./NotFound";
 
 export default function App() {
-
+  
   let [authToken, setAuthToken] = useState("");
   let [usuari, setUsuari] = useState("");
 

@@ -1,50 +1,53 @@
 import React from 'react'
 import { UserContext } from '../userContext';
 import { useState, useContext } from 'react';
+import useForm from "../hooks/useForm";
 
 export default function Register({ setCanvi }) {
-  
-  let [formulario, setFormulari] = useState({});
   let [error, setError] = useState("");
   let {authToken, setAuthToken, usuari, setUsuari}=useContext(UserContext);
-
-  const handleChange = (e) => {
-    e.preventDefault();
-
-    setFormulari({
-      ...formulario,
-      [e.target.name]: e.target.value
-    });
-  };
+  const { formState, onInputChange, onResetForm } = useForm({
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+  });  
+  const {name,email,password,password2} = formState;
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    let { name, email, password, password2 } = formulario;
-    alert("He enviat les Dades:  " + name +"/" +email +"/" + password + "/" +password2);
-    // Enviam dades a l'aPI i recollim resultat
-    try {
-      const data = await fetch("https://backend.insjoaquimmir.cat/api/register", {
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        method: "POST",
-        // Si els noms i les variables coincideix, podem simplificar
-        body: JSON.stringify({ name, email, password })
-      })
-
-      const resposta = await data.json();
-      if (resposta.success === true){
-        alert(resposta.authToken);
-        setAuthToken(resposta.authToken);
-        setUsuari(email);
-      }else{
-        setError(resposta.message);
-      } 
-      // alert("He enviat les Dades:  " + email + "/" + password);
-    } catch {
-      console.log("Error");
-      //alert("catch");
+    if (password == password2){
+      alert("He enviat les Dades:  " + name +"/" +email +"/" + password + "/" +password2);
+      // Enviam dades a l'aPI i recollim resultat
+      try {
+        const data = await fetch("https://backend.insjoaquimmir.cat/api/register", {
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          method: "POST",
+          // Si els noms i les variables coincideix, podem simplificar
+          body: JSON.stringify({ name, email, password })
+        })
+  
+        const resposta = await data.json();
+        if (resposta.success === true){
+          // alert(resposta.authToken);
+          setAuthToken(resposta.authToken);
+          setUsuari(email);
+          if (! sessionStorage.getItem('token')){
+            sessionStorage.setItem('token', resposta.authToken);
+          }
+        }else{
+          setError(resposta.message);
+        } 
+        // alert("He enviat les Dades:  " + email + "/" + password);
+      } catch {
+        console.log("Error");
+        //alert("catch");
+      }
+    }else{
+      setError("Las contraseñas no coinciden")
     }
   };
 
@@ -60,28 +63,28 @@ export default function Register({ setCanvi }) {
             <label htmlFor="login__username"><svg className="icon">
                 <use xlinkHref="#icon-user"></use>
               </svg><span className="hidden">Username</span></label>
-              <input className="form__input" name="name" id="username" type="text" placeholder="Username" onChange={handleChange}/>              
+              <input className="form__input" name="name" id="username" type="text" placeholder="Username" onChange={(e) => {onInputChange(e); }}/>              
           </div>
 
           <div className="form__field">
             <label htmlFor="login__username"><svg className="icon">
                 <use xlinkHref="#icon-user"></use>
               </svg><span className="hidden">Username</span></label>
-              <input className="form__input" name="email" id="email" type="mail" placeholder="Email" onChange={handleChange}/>      
+              <input className="form__input" name="email" id="email" type="mail" placeholder="Email" onChange={(e) => {onInputChange(e); }}/>      
           </div>
 
           <div className="form__field">
             <label htmlFor="login__password"><svg className="icon">
                 <use xlinkHref="#icon-lock"></use>
               </svg><span className="hidden">Password</span></label>
-              <input className="form__input" name="password" id="password" type="password" placeholder="******************" onChange={handleChange}/>  
+              <input className="form__input" name="password" id="password" type="password" placeholder="******************" onChange={(e) => {onInputChange(e); }}/>  
           </div>
 
           <div className="form__field">
             <label htmlFor="login__password"><svg className="icon">
                 <use xlinkHref="#icon-lock"></use>
               </svg><span className="hidden">Password</span></label>
-              <input className="form__input" name="password2" id="confirm-password" type="password" placeholder="******************" onChange={handleChange}/>  
+              <input className="form__input" name="password2" id="confirm-password" type="password" placeholder="******************" onChange={(e) => {onInputChange(e); }}/>  
           </div>
 
           {error ? <div className="error">{error}</div> : <></>}

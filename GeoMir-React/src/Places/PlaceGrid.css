@@ -155,3 +155,19 @@
     color: yellow !important;
     -webkit-text-stroke: 2px black;
 }
+svg.load{
+    height: 126px;
+    width: 126px;
+    color: white;
+}
+.contenidosvg{
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+svg.load path,
+svg.load rect{
+  fill: white;
+}

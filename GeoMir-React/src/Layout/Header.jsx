@@ -20,8 +20,6 @@ export default function Header() {
       })
       const resposta = await data.json();
       if (resposta.success === true) {
-        console.log(resposta.user);
-        console.log(resposta.roles);
         setNom(resposta.user.name);
         setRoles(resposta.roles);
       }else{
@@ -53,8 +51,10 @@ export default function Header() {
 
       const resposta = await data.json();
       if (resposta.success === true){
-        console.log(resposta.authToken);
+        // console.log(resposta.authToken);
         setAuthToken('');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('token');
       } 
     } catch {
       console.log("Error");
