@@ -6,5 +6,6 @@ export default function PostsMenu() {
               <Link to="/posts/add" className='navLink'>Afegir Entrada</Link>
               <Link to="/posts/grid" className='navLink'>Grid</Link>
               <Link to="/posts" className='navLink'>List</Link>
+              <Link to="/posts/marks" className='navLink'>Marks</Link>
             </div>;
 }

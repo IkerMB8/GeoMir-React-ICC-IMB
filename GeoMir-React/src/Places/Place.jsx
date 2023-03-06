@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { UserContext } from "../userContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import "./PlaceGrid.css";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
+import { placeMarkReducer } from "./placeMarkReducer";
 
+const initialState = [];
+const init = () => {
+  return JSON.parse(localStorage.getItem("marks")) || [];
+};
 
 export default function Place() {
+  const { pathname } = useLocation()
+  const [marks, dispatchMarks] = useReducer(placeMarkReducer, initialState, init);
   let navigate = useNavigate();
   const { id } = useParams();
   let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
   let [ favorito, setFavorito ] = useState(false);
+  let [ marked, setMarked ] = useState(false);
   const { data, error, loading, setUrl, setOptions, refresh, setRefresh } = useFetch("https://backend.insjoaquimmir.cat/api/places/"+id, {
     headers: {
       "Accept": "application/json",
@@ -20,10 +28,49 @@ export default function Place() {
     },
     method: "GET",
   });
+  useEffect(() => {
+    localStorage.setItem("marks", JSON.stringify(marks));
+  }, [marks]);
 
   useEffect(()=>{
-    comprobarFavorito()
+    comprobarFavorito();
+    comprobarMark();
   }, []);
+
+  const handle = (name, description) => {
+    console.log("Afegeixo marca al place amb ID "+id);
+    const newMark = {
+      idplace: id,
+      name: name,
+      description: description,
+      ruta: pathname,
+    };
+    const action = {
+      type: "Add Mark",
+      payload: newMark
+    };
+    dispatchMarks(action);
+    setMarked(true);
+  };
+
+  const handleDelete = () => {
+    console.log("Eliminada la marca del place amb ruta" + pathname);
+    dispatchMarks({
+      type: "Del Mark",
+      payload: pathname
+    });
+    setMarked(false);
+  };
+
+  const comprobarMark = async (e) => {
+    if (marks[0] != null){
+      marks.map(function(mark){
+        if (mark.ruta == pathname){
+          setMarked(true);
+        }
+      })
+    }
+  }
 
   const deletePlace = async (e, id) => {
     try {
@@ -47,7 +94,6 @@ export default function Place() {
       console.log("Error");
     }
   };
-
   const comprobarFavorito = async (e) => {
     try {
       const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id+"/favorites", {
@@ -124,14 +170,8 @@ export default function Place() {
         <div className="contenidosvg">
           <svg  className="load" version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             width="40px" height="40px" viewBox="0 0 50 50" xmlSpace="preserve">
-          <path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
-            <animateTransform attributeType="xml"
-              attributeName="transform"
-              type="rotate"
-              from="0 25 25"
-              to="360 25 25"
-              dur="0.6s"
-              repeatCount="indefinite"/>
+            <path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
+              <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
             </path>
           </svg>
         </div>
@@ -167,6 +207,12 @@ export default function Place() {
                       <i className="bi bi-share"></i>
                   </div>
                   <div className="functder">
+                    {marked == true &&
+                      <button onClick={() => handleDelete()} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
+                    }
+                    {marked == false &&  
+                      <button onClick={(e) => {handle(data.name, data.description);}} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
+                    }  
                       <i className="bi bi-flag"></i>
                   </div>
               </div>

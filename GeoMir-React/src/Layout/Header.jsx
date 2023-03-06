@@ -71,6 +71,7 @@ export default function Header() {
           {/* <Link to="/about">About </Link> */}
           <Link to="/places">Places </Link>
           <Link to="/posts">Posts </Link>
+          <Link to="/todos">Todos </Link>
         </div>
         <div className="right">
           <p className='nom'>

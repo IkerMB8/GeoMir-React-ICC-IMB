@@ -6,5 +6,6 @@ export default function PlaceMenu() {
               <Link to="/places/add" className='navLink'>Afegir Entrada</Link>
               <Link to="/places/grid" className='navLink'>Grid</Link>
               <Link to="/places" className='navLink'>List</Link>
+              <Link to="/places/marks" className='navLink'>Marks</Link>
             </div>;
   }

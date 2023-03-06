@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { UserContext } from "../userContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import "./PostGrid.css";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
+import { postMarkReducer } from './postMarkReducer';
+
+const initialState = [];
+const init = () => {
+  return JSON.parse(localStorage.getItem("marks2")) || [];
+};
 
 export default function Post() {
+    const { pathname } = useLocation()
+    const [marks2, dispatchMarks2] = useReducer(postMarkReducer, initialState, init);
     let navigate = useNavigate();
     const { id } = useParams();
     let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
     let [like, setLike ] = useState(false);
+    let [ marked, setMarked ] = useState(false);
     const { data, error, loading, setUrl, setOptions, refresh, setRefresh } = useFetch("https://backend.insjoaquimmir.cat/api/posts/"+id, {
       headers: {
         "Accept": "application/json",
@@ -19,10 +28,48 @@ export default function Post() {
       },
       method: "GET",
     });
+    useEffect(() => {
+        localStorage.setItem("marks2", JSON.stringify(marks2));
+    }, [marks2]);
 
     useEffect(()=>{
-        comprobarLike()
+        comprobarLike();
+        comprobarMark();
     }, []);
+
+    const handle = (body) => {
+        console.log("Afegeixo marca al post amb ID "+id);
+        const newMark = {
+          idpost: id,
+          body: body,
+          ruta: pathname,
+        };
+        const action = {
+          type: "Add Mark",
+          payload: newMark
+        };
+        dispatchMarks2(action);
+        setMarked(true);
+      };
+    
+      const handleDelete = () => {
+        console.log("Eliminada la marca del post amb ruta" + pathname);
+        dispatchMarks2({
+          type: "Del Mark",
+          payload: pathname
+        });
+        setMarked(false);
+      };
+    
+      const comprobarMark = async (e) => {
+        if (marks2[0] != null){
+          marks2.map(function(mark){
+            if (mark.ruta == pathname){
+              setMarked(true);
+            }
+          })
+        }
+      }
 
     const deletePost = async (e, id) => {
         try {
@@ -165,9 +212,14 @@ export default function Post() {
                                 <i className="bi bi-share"></i>
                             </div>
                             <div className="functder">
-                                <i className="bi bi-flag"></i>
+                                {marked == true &&
+                                    <button onClick={() => handleDelete()} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
+                                }
+                                {marked == false &&  
+                                    <button onClick={(e) => {handle(data.body);}} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
+                                }  
+                                <i className="bi bi-flag"></i>                            </div>
                             </div>
-                        </div>
                         <div>
                             <p>{ data.likes_count } likes</p>
                             <p>{ data.description }</p>

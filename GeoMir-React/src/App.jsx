@@ -21,6 +21,9 @@ import PostsEdit from "./Posts/PostsEdit";
 import PostsMenu from "./Posts/PostsMenu";
 import CommentsList from "./Posts/Comments/CommentsList";
 import NotFound from "./NotFound";
+import ToDos from "./todos/ToDos";
+import PlaceMarks from "./Places/placeMarks";
+import PostMarks from "./Posts/postMarks";
 
 export default function App() {
   
@@ -48,6 +51,9 @@ export default function App() {
               <Route path="/places/:id" element={<> <PlacesMenu/><Place/> </>} />
               <Route path="/places/edit/:id" element={<> <PlacesMenu/><PlacesEdit/> </>} />
               <Route path="/places/:id/reviews" element={<> <PlacesMenu/><ReviewsList/> </>} />
+              <Route path="/todos" element={<> <ToDos/> </>} />
+              <Route path="/places/marks" element={<> <PlacesMenu/><PlaceMarks/> </>} />
+              <Route path="/posts/marks" element={<> <PostsMenu/><PostMarks/> </>} />
               {/* <Route path="/about" element={<About />} /> */}
             </Routes>
             <Footer />
