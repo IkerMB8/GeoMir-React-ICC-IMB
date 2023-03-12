@@ -5,21 +5,22 @@ import { useContext, useState, useEffect } from "react";
 import "./PostGrid.css";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
-import { postMarkReducer } from './postMarkReducer';
+// import { postMarkReducer } from './postMarkReducer';
+import { useDispatch, useSelector } from "react-redux";
+import { addmark, delmark, compmark } from "../slices/postMarkSlice";
 
-const initialState = [];
-const init = () => {
-  return JSON.parse(localStorage.getItem("marks2")) || [];
-};
+// const initialState = [];
+// const init = () => {
+//   return JSON.parse(localStorage.getItem("marks2")) || [];
+// };
 
 export default function Post() {
     const { pathname } = useLocation()
-    const [marks2, dispatchMarks2] = useReducer(postMarkReducer, initialState, init);
+    // const [marks2, dispatchMarks2] = useReducer(postMarkReducer, initialState, init);
     let navigate = useNavigate();
     const { id } = useParams();
     let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
     let [like, setLike ] = useState(false);
-    let [ marked, setMarked ] = useState(false);
     const { data, error, loading, setUrl, setOptions, refresh, setRefresh } = useFetch("https://backend.insjoaquimmir.cat/api/posts/"+id, {
       headers: {
         "Accept": "application/json",
@@ -28,48 +29,54 @@ export default function Post() {
       },
       method: "GET",
     });
+
+    const { marks2, isMarked } = useSelector((state) => state.marks2);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         localStorage.setItem("marks2", JSON.stringify(marks2));
+        dispatch(compmark(pathname));
     }, [marks2]);
 
     useEffect(()=>{
         comprobarLike();
-        comprobarMark();
     }, []);
 
     const handle = (body) => {
-        console.log("Afegeixo marca al post amb ID "+id);
-        const newMark = {
-          idpost: id,
-          body: body,
-          ruta: pathname,
-        };
-        const action = {
-          type: "Add Mark",
-          payload: newMark
-        };
-        dispatchMarks2(action);
-        setMarked(true);
+      console.log("Afegeixo marca al place amb ID "+id);
+      const newMark = {
+        idplace: id,
+        body: body,
+        ruta: pathname
       };
+      console.log("Abans del dispatch");
+      dispatch(addmark(newMark));
+      // setMarked(true);
+    };
+
+    // const handle = (body) => {
+    //   console.log("Afegeixo marca al post amb ID "+id);
+    //   const newMark = {
+    //     idpost: id,
+    //     body: body,
+    //     ruta: pathname,
+    //   };
+    //   const action = {
+    //     type: "Add Mark",
+    //     payload: newMark
+    //   };
+    //   dispatchMarks2(action);
+    //   setMarked(true);
+    // };
     
-      const handleDelete = () => {
-        console.log("Eliminada la marca del post amb ruta" + pathname);
-        dispatchMarks2({
-          type: "Del Mark",
-          payload: pathname
-        });
-        setMarked(false);
-      };
-    
-      const comprobarMark = async (e) => {
-        if (marks2[0] != null){
-          marks2.map(function(mark){
-            if (mark.ruta == pathname){
-              setMarked(true);
-            }
-          })
-        }
-      }
+    // const handleDelete = () => {
+    //   console.log("Eliminada la marca del post amb ruta" + pathname);
+    //   dispatchMarks2({
+    //     type: "Del Mark",
+    //     payload: pathname
+    //   });
+    //   setMarked(false);
+    // };
 
     const deletePost = async (e, id) => {
         try {
@@ -204,20 +211,22 @@ export default function Post() {
                         </div>
                         <div className="funct">
                             <div className="functizq">
-                                {like == false &&
-                                <button onClick={(e) => {likePost(e, data.id);}} className="delete botonlike"><i className="bi bi-heart"></i></button>}
-                                {like == true &&
-                                <button onClick={(e) => {unlike(e, data.id);}} className="delete botonlike rojo"><i className="bi bi-heart-fill"></i></button>}
+                                {like ? (
+                                  <button onClick={(e) => {unlike(e, data.id);}} className="delete botonlike rojo"><i className="bi bi-heart-fill"></i></button>
+                                ) : (
+                                  <button onClick={(e) => {likePost(e, data.id);}} className="delete botonlike"><i className="bi bi-heart"></i></button>
+                                )}
                                 <Link to={"/posts/"+data.id+"/comments"}><i className="bi bi-chat"></i></Link>                        
                                 <i className="bi bi-share"></i>
                             </div>
                             <div className="functder">
-                                {marked == true &&
-                                    <button onClick={() => handleDelete()} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
-                                }
-                                {marked == false &&  
-                                    <button onClick={(e) => {handle(data.body);}} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
-                                }  
+                                {isMarked ? (
+                                  // <button onClick={() => handleDelete()} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
+                                  <button onClick={() => dispatch(delmark(pathname))} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
+                                ) : ( 
+                                  // <button onClick={(e) => {handle(data.body);}} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
+                                  <button onClick={() => handle(data.body)} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
+                                )}  
                                 <i className="bi bi-flag"></i>                            </div>
                             </div>
                         <div>

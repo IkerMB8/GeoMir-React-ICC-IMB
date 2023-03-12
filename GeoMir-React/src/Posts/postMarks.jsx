@@ -1,17 +1,20 @@
 import React, { useEffect, useState, useReducer } from "react";
-import { postMarkReducer } from "./postMarkReducer";
+// import { postMarkReducer } from "./postMarkReducer";
 import PostMark from "./postMark";
+import { useSelector } from "react-redux";
+import { addmark, delmark } from "../slices/postMarkSlice";
 
 // Estat inicial del reducer. Buit
-const initialState = [];
-const init = () => {
-  // Si localstorage tornes null tornariem un array buit
-  return JSON.parse(localStorage.getItem("marks2")) || [];
-};
+// const initialState = [];
+// const init = () => {
+//   // Si localstorage tornes null tornariem un array buit
+//   return JSON.parse(localStorage.getItem("marks2")) || [];
+// };
 
 export const postMarks = () => {
+  const { marks2 } = useSelector((state) => state.marks2);
   let [noMark, setNoMark] = useState(false);
-  const [marks2, dispatchMarks2] = useReducer(postMarkReducer, initialState, init);
+  // const [marks2, dispatchMarks2] = useReducer(postMarkReducer, initialState, init);
 
   useEffect(() => {
     localStorage.setItem("marks2", JSON.stringify(marks2));
@@ -22,18 +25,18 @@ export const postMarks = () => {
     }
   }, [marks2]);
 
-  const handleDelete = (ruta) => {
-    console.log("Eliminada la marca del post " + ruta);
-    dispatchMarks2({
-      type: "Del Mark",
-      payload: ruta
-    });
-  };
+  // const handleDelete = (ruta) => {
+  //   console.log("Eliminada la marca del post " + ruta);
+  //   dispatchMarks2({
+  //     type: "Del Mark",
+  //     payload: ruta
+  //   });
+  // };
 
   return (
     <>
         <h1 style={{fontSize: '2.5em', margin:'25px'}}>Marcadores</h1>
-        <div className="container">
+        <div className="contenido">
             {noMark == false &&
             <table className="tabla">
             <thead>
@@ -45,7 +48,7 @@ export const postMarks = () => {
             </thead>
             <tbody>
                 {marks2.map((mark) => (
-                <tr key={mark.idpost}><PostMark mark={mark} handleDelete={handleDelete} /></tr>
+                  <tr key={mark.idpost}><PostMark mark={mark} delmark={delmark} /></tr>
                 ))}
             </tbody>
             </table>}

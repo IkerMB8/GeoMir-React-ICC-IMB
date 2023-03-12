@@ -2,7 +2,7 @@ import { useState } from "react";
 export const useForm = (initialForm={}) => {
     let [formState, setFormState] = useState(initialForm);
     const onResetForm = () => {
-        setFormState(useState(initialForm));
+        setFormState(initialForm);
     };
     const onInputChange = ({ target }) => {
         // amb { target } desestructurem e

@@ -5,21 +5,22 @@ import { useContext, useState, useEffect } from "react";
 import "./PlaceGrid.css";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
-import { placeMarkReducer } from "./placeMarkReducer";
+// import { placeMarkReducer } from "./placeMarkReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { addmark, delmark, compmark } from "../slices/placeMarkSlice";
 
-const initialState = [];
-const init = () => {
-  return JSON.parse(localStorage.getItem("marks")) || [];
-};
+// const initialState = [];
+// const init = () => {
+//   return JSON.parse(localStorage.getItem("marks")) || [];
+// };
 
 export default function Place() {
   const { pathname } = useLocation()
-  const [marks, dispatchMarks] = useReducer(placeMarkReducer, initialState, init);
+  // const [marks, dispatchMarks] = useReducer(placeMarkReducer, initialState, init);
   let navigate = useNavigate();
   const { id } = useParams();
   let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
   let [ favorito, setFavorito ] = useState(false);
-  let [ marked, setMarked ] = useState(false);
   const { data, error, loading, setUrl, setOptions, refresh, setRefresh } = useFetch("https://backend.insjoaquimmir.cat/api/places/"+id, {
     headers: {
       "Accept": "application/json",
@@ -28,49 +29,57 @@ export default function Place() {
     },
     method: "GET",
   });
+  
+  const { marks, isMarked } = useSelector((state) => state.marks);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     localStorage.setItem("marks", JSON.stringify(marks));
+    dispatch(compmark(pathname));
   }, [marks]);
 
   useEffect(()=>{
     comprobarFavorito();
-    comprobarMark();
   }, []);
 
   const handle = (name, description) => {
     console.log("Afegeixo marca al place amb ID "+id);
+    if (description.length <= 1) return;
     const newMark = {
       idplace: id,
       name: name,
       description: description,
-      ruta: pathname,
+      ruta: pathname
     };
-    const action = {
-      type: "Add Mark",
-      payload: newMark
-    };
-    dispatchMarks(action);
-    setMarked(true);
+    console.log("Abans del dispatch");
+    dispatch(addmark(newMark));
+    // setMarked(true);
   };
 
-  const handleDelete = () => {
-    console.log("Eliminada la marca del place amb ruta" + pathname);
-    dispatchMarks({
-      type: "Del Mark",
-      payload: pathname
-    });
-    setMarked(false);
-  };
+  // const handle = (name, description) => {
+  //   console.log("Afegeixo marca al place amb ID "+id);
+  //   const newMark = {
+  //     idplace: id,
+  //     name: name,
+  //     description: description,
+  //     ruta: pathname,
+  //   };
+  //   const action = {
+  //     type: "Add Mark",
+  //     payload: newMark
+  //   };
+  //   dispatchMarks(action);
+  //   setMarked(true);
+  // };
 
-  const comprobarMark = async (e) => {
-    if (marks[0] != null){
-      marks.map(function(mark){
-        if (mark.ruta == pathname){
-          setMarked(true);
-        }
-      })
-    }
-  }
+  // const handleDelete = () => {
+  //   console.log("Eliminada la marca del place amb ruta" + pathname);
+  //   dispatchMarks({
+  //     type: "Del Mark",
+  //     payload: pathname
+  //   });
+  //   setMarked(false);
+  // };
 
   const deletePlace = async (e, id) => {
     try {
@@ -199,20 +208,22 @@ export default function Place() {
               </div>
               <div className="funct">
                   <div className="functizq">
-                      {favorito == false &&
-                        <button onClick={(e) => {favorite(e, data.id);}} className="delete botonfav"><i className="bi bi-star"></i></button>}
-                      {favorito == true &&
-                        <button onClick={(e) => {unfavorite(e, data.id);}} className="delete botonfav amarillo"><i className="bi bi-star-fill"></i></button>}
-                      <Link to={"/places/"+data.id+"/reviews"}><i className="bi bi-chat"></i></Link>
-                      <i className="bi bi-share"></i>
+                    {favorito ? (
+                      <button onClick={(e) => {unfavorite(e, data.id);}} className="delete botonfav amarillo"><i className="bi bi-star-fill"></i></button>
+                    ) : (
+                      <button onClick={(e) => {favorite(e, data.id);}} className="delete botonfav"><i className="bi bi-star"></i></button>
+                    )}
+                    <Link to={"/places/"+data.id+"/reviews"}><i className="bi bi-chat"></i></Link>
+                    <i className="bi bi-share"></i>
                   </div>
                   <div className="functder">
-                    {marked == true &&
-                      <button onClick={() => handleDelete()} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
-                    }
-                    {marked == false &&  
-                      <button onClick={(e) => {handle(data.name, data.description);}} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
-                    }  
+                    {isMarked ? (
+                      // <button onClick={() => handleDelete()} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
+                      <button onClick={() => dispatch(delmark(pathname))} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
+                    ) : (
+                      // <button onClick={(e) => {handle(data.name, data.description);}} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
+                      <button onClick={() => handle(data.name,data.description)} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
+                    )}
                       <i className="bi bi-flag"></i>
                   </div>
               </div>
