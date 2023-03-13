@@ -24,11 +24,27 @@ import NotFound from "./NotFound";
 import ToDos from "./todos/ToDos";
 import PlaceMarks from "./Places/placeMarks";
 import PostMarks from "./Posts/postMarks";
+import { db } from "./firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import { addtodo, resetState } from "./slices/todoSlice";
 
 export default function App() {
   
   let [authToken, setAuthToken] = useState("");
   let [usuari, setUsuari] = useState("");
+  const todosCollection = collection(db, "ToDos");
+  const dispatch = useDispatch();
+  const getTodos = async () => {
+    dispatch(resetState());
+    const dades = await getDocs(todosCollection);
+    dades.docs.map((v) => {
+      dispatch(addtodo(v.data()))
+    });
+  };
+  useEffect(() => {
+    getTodos();
+  }, [usuari]);
 
   return (
     <>

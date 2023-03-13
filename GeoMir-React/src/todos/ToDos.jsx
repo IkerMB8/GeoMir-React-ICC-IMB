@@ -1,3 +1,4 @@
+//REDUCER
 // import React, { useEffect, useState, useReducer } from "react";
 // import { ToDo } from "./ToDo";
 // import { ToDoAdd } from "./ToDoAdd";
@@ -83,14 +84,16 @@
 //   );
 // };
 
+
+//REDUX
 // export default ToDos
 import React from "react";
 import { useEffect, useReducer } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addtodo } from "../slices/todoSlice";
-
+import { useSelector } from "react-redux";
 import { ToDo } from "./ToDo";
 import { ToDoAdd } from "./ToDoAdd";
+import { db } from "../firebase";
+import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 //import { todosReducer } from "./todosReducer";
 
 // Estat inicial del reducer. Buit
@@ -105,10 +108,28 @@ import { ToDoAdd } from "./ToDoAdd";
 export const ToDos = () => {
 
   const { todos } = useSelector((state) => state.todos);
-  const dispatch = useDispatch();
-
+  const todosCollection = collection(db,"ToDos");
+  const synchronize = async () => {
+    // Obtenim tots els todos per adesprés esobrrar-los
+    const dades = await getDocs(todosCollection);
+    // Esborrem tots els todos
+    // aquest sistema no es recomana en entorn web,
+    // però no hi ha un altra opció
+    dades.docs.map((v) => {
+      deleteDoc(doc(db, "ToDos", v.id));
+    });
+    // Afegim tots els todos de nou
+    todos.map((p) => {
+      addDoc(todosCollection, {
+        id: p.id,
+        description: p.description,
+        done: p.done,
+      });
+    });
+  };
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
+    // localStorage.setItem("todos", JSON.stringify(todos));
+    synchronize();
   }, [todos]);
 
   return (
@@ -116,7 +137,6 @@ export const ToDos = () => {
       <h1 style={{fontSize: '2.5em', margin:'25px'}}>TodosList</h1>
       <ToDoAdd/>
       <div className="container">
-        
         {todos.length == 0 ? (
           <div className="warning error">No hay tareas</div>
         ) : (
