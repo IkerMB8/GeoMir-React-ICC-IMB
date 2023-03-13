@@ -8,6 +8,8 @@ import useFetch from "../hooks/useFetch";
 // import { placeMarkReducer } from "./placeMarkReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { addmark, delmark, compmark } from "../slices/placeMarkSlice";
+import { db } from "../firebase";
+import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 
 // const initialState = [];
 // const init = () => {
@@ -33,8 +35,30 @@ export default function Place() {
   const { marks, isMarked } = useSelector((state) => state.marks);
   const dispatch = useDispatch();
 
+  const placeMarksCollection = collection(db, "markPlaces");
+  const synchronize = async () => {
+    // Obtenim tots els todos per adesprés esobrrar-los
+    const dades = await getDocs(placeMarksCollection);
+    // Esborrem tots els todos
+    // aquest sistema no es recomana en entorn web,
+    // però no hi ha un altra opció
+    dades.docs.map((v) => {
+      deleteDoc(doc(db, "markPlaces", v.id));
+    });
+    // Afegim tots els todos de nou
+    marks.map((p) => {
+      addDoc(placeMarksCollection, {
+        idplace: p.idplace,
+        name: p.name,
+        description: p.description,
+        ruta: p.ruta,
+      });
+    });
+  };
+
   useEffect(() => {
-    localStorage.setItem("marks", JSON.stringify(marks));
+    synchronize();
+    // localStorage.setItem("marks", JSON.stringify(marks));
     dispatch(compmark(pathname));
   }, [marks]);
 

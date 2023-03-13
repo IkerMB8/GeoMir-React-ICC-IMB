@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    todos: JSON.parse(localStorage.getItem("todos")) || []
+    // todos: JSON.parse(localStorage.getItem("todos")) || []
+    todos: []
 }
 export const todosSlice = createSlice({
     name: 'todos',
@@ -16,9 +17,9 @@ export const todosSlice = createSlice({
         toggletodo: (state,action) => {
             state.todos = state.todos.map ((todo)=> {
                 if (todo.id === action.payload) { //id
-                return { ...todo, done:!todo.done } // invertim el done
+                    return { ...todo, done:!todo.done } // invertim el done
                 }
-            return todo
+                return todo
             })
         },
         resetState: (state, action) => {

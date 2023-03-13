@@ -3,6 +3,8 @@ import React, { useEffect, useState, useReducer } from "react";
 import PlaceMark from "./placeMark";
 import { useSelector } from "react-redux";
 import { addmark, delmark } from "../slices/placeMarkSlice";
+import { db } from "../firebase";
+import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 
 // Estat inicial del reducer. Buit
 // const initialState = [];
@@ -15,9 +17,30 @@ export const placeMarks = () => {
   const { marks } = useSelector((state) => state.marks);
   let [noMark, setNoMark] = useState(false);
   // const [marks, dispatchMarks] = useReducer(placeMarkReducer, initialState, init);
+  const placeMarksCollection = collection(db, "markPlaces");
+  const synchronize = async () => {
+    // Obtenim tots els todos per adesprés esobrrar-los
+    const dades = await getDocs(placeMarksCollection);
+    // Esborrem tots els todos
+    // aquest sistema no es recomana en entorn web,
+    // però no hi ha un altra opció
+    dades.docs.map((v) => {
+      deleteDoc(doc(db, "markPlaces", v.id));
+    });
+    // Afegim tots els todos de nou
+    marks.map((p) => {
+      addDoc(placeMarksCollection, {
+        idplace: p.idplace,
+        name: p.name,
+        description: p.description,
+        ruta: p.ruta,
+      });
+    });
+  };
 
   useEffect(() => {
-    localStorage.setItem("marks", JSON.stringify(marks));
+    synchronize();
+    // localStorage.setItem("marks", JSON.stringify(marks));
     if (marks[0] == null){
         setNoMark(true);
     }else{

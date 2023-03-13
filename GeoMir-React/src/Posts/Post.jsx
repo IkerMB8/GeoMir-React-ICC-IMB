@@ -7,7 +7,9 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 // import { postMarkReducer } from './postMarkReducer';
 import { useDispatch, useSelector } from "react-redux";
-import { addmark, delmark, compmark } from "../slices/postMarkSlice";
+import { addpostmark, delpostmark, comppostmark } from "../slices/postMarkSlice";
+import { db } from "../firebase";
+import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 
 // const initialState = [];
 // const init = () => {
@@ -33,9 +35,30 @@ export default function Post() {
     const { marks2, isMarked } = useSelector((state) => state.marks2);
     const dispatch = useDispatch();
 
+    const placeMarksCollection2 = collection(db, "markPosts");
+    const synchronize = async () => {
+      // Obtenim tots els todos per adesprés esobrrar-los
+      const dades = await getDocs(placeMarksCollection2);
+      // Esborrem tots els todos
+      // aquest sistema no es recomana en entorn web,
+      // però no hi ha un altra opció
+      dades.docs.map((v) => {
+        deleteDoc(doc(db, "markPosts", v.id));
+      });
+      // Afegim tots els todos de nou
+      marks2.map((p) => {
+        addDoc(placeMarksCollection2, {
+          idpost: p.idpost,
+          body: p.body,
+          ruta: p.ruta,
+        });
+      });
+    };
+
     useEffect(() => {
-        localStorage.setItem("marks2", JSON.stringify(marks2));
-        dispatch(compmark(pathname));
+        synchronize();
+        // localStorage.setItem("marks2", JSON.stringify(marks2));
+        dispatch(comppostmark(pathname));
     }, [marks2]);
 
     useEffect(()=>{
@@ -45,12 +68,12 @@ export default function Post() {
     const handle = (body) => {
       console.log("Afegeixo marca al place amb ID "+id);
       const newMark = {
-        idplace: id,
+        idpost: id,
         body: body,
         ruta: pathname
       };
       console.log("Abans del dispatch");
-      dispatch(addmark(newMark));
+      dispatch(addpostmark(newMark));
       // setMarked(true);
     };
 
@@ -222,7 +245,7 @@ export default function Post() {
                             <div className="functder">
                                 {isMarked ? (
                                   // <button onClick={() => handleDelete()} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
-                                  <button onClick={() => dispatch(delmark(pathname))} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
+                                  <button onClick={() => dispatch(delpostmark(pathname))} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark-check-fill"></i></button>
                                 ) : ( 
                                   // <button onClick={(e) => {handle(data.body);}} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>
                                   <button onClick={() => handle(data.body)} style={{backgroundColor:'transparent', border:'none'}}><i style={{fontSize:'2em', color:'#606468'}} className="bi bi-bookmark"></i></button>

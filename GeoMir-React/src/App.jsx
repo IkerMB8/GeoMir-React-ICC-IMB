@@ -28,12 +28,16 @@ import { db } from "./firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import { addtodo, resetState } from "./slices/todoSlice";
+import { addmark, resetPlaceMarks } from "./slices/placeMarkSlice";
+import { addpostmark, resetPostMarks } from "./slices/postMarkSlice";
 
 export default function App() {
   
   let [authToken, setAuthToken] = useState("");
   let [usuari, setUsuari] = useState("");
   const todosCollection = collection(db, "ToDos");
+  const placeMarksCollection = collection(db, "markPlaces");
+  const placeMarksCollection2 = collection(db, "markPosts");
   const dispatch = useDispatch();
   const getTodos = async () => {
     dispatch(resetState());
@@ -42,8 +46,24 @@ export default function App() {
       dispatch(addtodo(v.data()))
     });
   };
+  const getPlaceMarks = async () => {
+    dispatch(resetPlaceMarks());
+    const dades = await getDocs(placeMarksCollection);
+    dades.docs.map((v) => {
+      dispatch(addmark(v.data()))
+    });
+  };
+  const getPostMarks = async () => {
+    dispatch(resetPostMarks());
+    const dades = await getDocs(placeMarksCollection2);
+    dades.docs.map((v) => {
+      dispatch(addpostmark(v.data()))
+    });
+  };
   useEffect(() => {
     getTodos();
+    getPlaceMarks();
+    getPostMarks();
   }, [usuari]);
 
   return (

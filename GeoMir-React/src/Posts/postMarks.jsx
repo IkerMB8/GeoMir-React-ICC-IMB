@@ -2,7 +2,9 @@ import React, { useEffect, useState, useReducer } from "react";
 // import { postMarkReducer } from "./postMarkReducer";
 import PostMark from "./postMark";
 import { useSelector } from "react-redux";
-import { addmark, delmark } from "../slices/postMarkSlice";
+import { addpostmark, delpostmark } from "../slices/postMarkSlice";
+import { db } from "../firebase";
+import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 
 // Estat inicial del reducer. Buit
 // const initialState = [];
@@ -15,9 +17,29 @@ export const postMarks = () => {
   const { marks2 } = useSelector((state) => state.marks2);
   let [noMark, setNoMark] = useState(false);
   // const [marks2, dispatchMarks2] = useReducer(postMarkReducer, initialState, init);
+  const placeMarksCollection2 = collection(db, "markPosts");
+  const synchronize = async () => {
+    // Obtenim tots els todos per adesprés esobrrar-los
+    const dades = await getDocs(placeMarksCollection2);
+    // Esborrem tots els todos
+    // aquest sistema no es recomana en entorn web,
+    // però no hi ha un altra opció
+    dades.docs.map((v) => {
+      deleteDoc(doc(db, "markPosts", v.id));
+    });
+    // Afegim tots els todos de nou
+    marks2.map((p) => {
+      addDoc(placeMarksCollection2, {
+        idpost: p.idpost,
+        body: p.body,
+        ruta: p.ruta,
+      });
+    });
+  };
 
   useEffect(() => {
-    localStorage.setItem("marks2", JSON.stringify(marks2));
+    synchronize();
+    // localStorage.setItem("marks2", JSON.stringify(marks2));
     if (marks2[0] == null){
         setNoMark(true);
     }else{
@@ -48,7 +70,7 @@ export const postMarks = () => {
             </thead>
             <tbody>
                 {marks2.map((mark) => (
-                  <tr key={mark.idpost}><PostMark mark={mark} delmark={delmark} /></tr>
+                  <tr key={mark.idpost}><PostMark mark={mark} delmark={delpostmark} /></tr>
                 ))}
             </tbody>
             </table>}

@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    marks: JSON.parse(localStorage.getItem("marks")) || [],
+    // marks: JSON.parse(localStorage.getItem("marks")) || [],
+    marks: [],
     isMarked: false
 }
 export const placeMarkSlice = createSlice({
@@ -21,9 +22,12 @@ export const placeMarkSlice = createSlice({
                     state.isMarked = true;
                 }
             })
-        }
+        },
+        resetPlaceMarks: (state, action) => {
+          state.marks = [];
+        },
     }
 })
-export const { addmark, delmark, compmark } = placeMarkSlice.actions
+export const { addmark, delmark, compmark, resetPlaceMarks } = placeMarkSlice.actions
 const placeMarkReducer = placeMarkSlice.reducer
 export default placeMarkReducer
