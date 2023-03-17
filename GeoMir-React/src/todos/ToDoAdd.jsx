@@ -42,9 +42,10 @@
 //   }
 import "../Places/PlacesAdd.css";
 import useForm from "../hooks/useForm";
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addtodo } from "../slices/todoSlice";
+import { UserContext } from '../userContext';
 
 export function ToDoAdd() {   
   const { formState, onInputChange, onResetForm } = useForm({
@@ -52,6 +53,7 @@ export function ToDoAdd() {
   });
   const { description } = formState;
   const dispatch = useDispatch();
+  let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
 
   const onFormSubmit = (event) => {
     event.preventDefault();
@@ -59,11 +61,11 @@ export function ToDoAdd() {
     const newTodo = {
       id: new Date().getTime(),
       description: description,
+      user: usuari,
       done: false
     };
     onResetForm();
     //handle(newTodo)
-    console.log("Abans del dispatch");
     dispatch(addtodo(newTodo));
   };
 

@@ -88,12 +88,12 @@
 //REDUX
 // export default ToDos
 import React from "react";
-import { useEffect, useReducer } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ToDo } from "./ToDo";
 import { ToDoAdd } from "./ToDoAdd";
 import { db } from "../firebase";
 import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
+import { deltodo, toggletodo } from "../slices/todoSlice";
 //import { todosReducer } from "./todosReducer";
 
 // Estat inicial del reducer. Buit
@@ -108,29 +108,30 @@ import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 export const ToDos = () => {
 
   const { todos } = useSelector((state) => state.todos);
-  const todosCollection = collection(db,"ToDos");
-  const synchronize = async () => {
-    // Obtenim tots els todos per adesprés esobrrar-los
-    const dades = await getDocs(todosCollection);
-    // Esborrem tots els todos
-    // aquest sistema no es recomana en entorn web,
-    // però no hi ha un altra opció
-    dades.docs.map((v) => {
-      deleteDoc(doc(db, "ToDos", v.id));
-    });
-    // Afegim tots els todos de nou
-    todos.map((p) => {
-      addDoc(todosCollection, {
-        id: p.id,
-        description: p.description,
-        done: p.done,
-      });
-    });
-  };
-  useEffect(() => {
-    // localStorage.setItem("todos", JSON.stringify(todos));
-    synchronize();
-  }, [todos]);
+  // const todosCollection = collection(db,"ToDos");
+  // const synchronize = async () => {
+  //   // Obtenim tots els todos per adesprés esobrrar-los
+  //   const dades = await getDocs(todosCollection);
+  //   // Esborrem tots els todos
+  //   // aquest sistema no es recomana en entorn web,
+  //   // però no hi ha un altra opció
+  //   dades.docs.map((v) => {
+  //     deleteDoc(doc(db, "ToDos", v.id));
+  //   });
+  //   // Afegim tots els todos de nou
+  //   todos.map((p) => {
+  //     addDoc(todosCollection, {
+  //       id: p.id,
+  //       description: p.description,
+  //       user: p.user,
+  //       done: p.done,
+  //     });
+  //   });
+  // };
+  // useEffect(() => {
+  //   // localStorage.setItem("todos", JSON.stringify(todos));
+  //   synchronize();
+  // }, [todos]);
 
   return (
     <>

@@ -25,9 +25,9 @@ import ToDos from "./todos/ToDos";
 import PlaceMarks from "./Places/placeMarks";
 import PostMarks from "./Posts/postMarks";
 import { db } from "./firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useDispatch } from "react-redux";
-import { addtodo, resetState } from "./slices/todoSlice";
+import { addtodostate, resetState } from "./slices/todoSlice";
 import { addmark, resetPlaceMarks } from "./slices/placeMarkSlice";
 import { addpostmark, resetPostMarks } from "./slices/postMarkSlice";
 
@@ -35,29 +35,49 @@ export default function App() {
   
   let [authToken, setAuthToken] = useState("");
   let [usuari, setUsuari] = useState("");
-  const todosCollection = collection(db, "ToDos");
+  // const todosCollection = collection(db, "ToDos");
   const placeMarksCollection = collection(db, "markPlaces");
   const placeMarksCollection2 = collection(db, "markPosts");
   const dispatch = useDispatch();
+  // const getTodos = async () => {
+  //   dispatch(resetState());
+  //   const dades = await getDocs(todosCollection);
+  //   dades.docs.map((v) => {
+  //     dispatch(addtodo(v.data()))
+  //   });
+  // };
   const getTodos = async () => {
     dispatch(resetState());
-    const dades = await getDocs(todosCollection);
-    dades.docs.map((v) => {
-      dispatch(addtodo(v.data()))
-    });
-  };
+    const q = query(collection(db, "ToDos"), where("user", "==", usuari));
+    const dades = await getDocs(q);
+    let ids = [];
+    dades.forEach((v) => {
+      if (!ids.includes(v.id)){
+        dispatch (addtodostate(v.data()))
+        ids.push(v.id)
+      }
+    })
+  }
   const getPlaceMarks = async () => {
     dispatch(resetPlaceMarks());
+    let ids = [];
     const dades = await getDocs(placeMarksCollection);
     dades.docs.map((v) => {
-      dispatch(addmark(v.data()))
+      if (!ids.includes(v.id)){
+        dispatch(addmark(v.data()))
+        ids.push(v.id)
+      }
     });
   };
   const getPostMarks = async () => {
     dispatch(resetPostMarks());
+    let ids = [];
     const dades = await getDocs(placeMarksCollection2);
     dades.docs.map((v) => {
-      dispatch(addpostmark(v.data()))
+      if (!ids.includes(v.id)){
+        dispatch(addpostmark(v.data()))
+        ids.push(v.id)
+      }
     });
   };
   useEffect(() => {
