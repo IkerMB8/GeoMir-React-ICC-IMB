@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 // import { placeMarkReducer } from "./placeMarkReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { addmark, delmark, compmark } from "../slices/placeMarkSlice";
+import { addmark, delmark, compmark } from "../slices/places/placeMarkSlice";
 import { db } from "../firebase";
 import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
+import ReviewsList from "./Reviews/ReviewsList";
 
 // const initialState = [];
 // const init = () => {
@@ -219,7 +220,8 @@ export default function Place() {
                       </div>
                       {usuari == data.author.email &&
                       <div className='funciones'>
-                          <Link className="iconos" to={"/places/edit/"+data.id} title="Editar"><i className="bi bi-pencil-square"></i></Link> 
+                          {/* <Link className="iconos" to={"/places/edit/"+data.id} title="Editar"><i className="bi bi-pencil-square"></i></Link>  */}
+                          <i className="bi bi-pencil-square"></i>
                           <button onClick={(e) => {deletePlace(e, data.id);}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button>
                       </div>}
                   </div>
@@ -273,6 +275,9 @@ export default function Place() {
                   <p>Longitude: { data.longitude }</p>
               </div>
             </div> 
+          </div>
+          <div style={{ width: '100%'}}>
+            <ReviewsList id={id} reviews_count={data.reviews_count} />
           </div>
         </div>
       )}

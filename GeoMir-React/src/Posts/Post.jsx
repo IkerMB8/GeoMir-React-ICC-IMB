@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 // import { postMarkReducer } from './postMarkReducer';
 import { useDispatch, useSelector } from "react-redux";
-import { addpostmark, delpostmark, comppostmark } from "../slices/postMarkSlice";
+import { addpostmark, delpostmark, comppostmark } from "../slices/posts/postMarkSlice";
 import { db } from "../firebase";
 import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
+import CommentsList from "./Comments/CommentsList";
 
 // const initialState = [];
 // const init = () => {
@@ -257,6 +258,9 @@ export default function Post() {
                             <p>{ data.description }</p>
                         </div>
                     </div>     
+                </div>
+                <div style={{ width: '100%'}}>
+                  <CommentsList id={id} comments_count={data.comments_count} />
                 </div>
             </div>
         )}

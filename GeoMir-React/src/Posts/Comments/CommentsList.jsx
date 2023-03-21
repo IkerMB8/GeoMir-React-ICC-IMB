@@ -1,72 +1,22 @@
 import React from 'react';
 import { UserContext } from "../../userContext";
 import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import CommentAdd from "./CommentAdd";
 import Comment from "./Comment";
+import { useDispatch, useSelector } from "react-redux";
+import { setCommentsCount } from "../../slices/posts/comments/commentslice";
+import { getComments } from "../../slices/posts/comments/thunks";
 
-export default function CommentsList() {
-  let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
-  let [ comments, setComments ] = useState([]);
-  const { id } = useParams();
-  let [ commentAdd, setCommentAdd ] = useState(false);
-  let [refresh,setRefresh] = useState(false);
+export const CommentsList = ({ id, comments_count }) => {
+  let { usuari, setUsuari, authToken, setAuthToken } = useContext(UserContext);
+  const dispatch = useDispatch();
+  const { comments=[], page=0, isLoading=true, add=true, error="", commentsCount=0 } = useSelector((state) => state.comments);
 
-  const getComments = async (e) => {
-    try {
-        const data = await fetch("https://backend.insjoaquimmir.cat/api/posts/"+id+"/comments", {
-            headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": 'Bearer '  + authToken,
-            },
-            method: "GET",
-        })
-        const resposta = await data.json();
-        console.log(resposta);
-        if (resposta.success == true){
-            console.log(resposta.data); 
-            resposta.data.map((comment) => {
-              if (usuari == comment.user.email){
-                setCommentAdd(true);
-              }
-            });
-            setComments(resposta.data);
-        }else{
-            console.log("La resposta no ha triomfat");
-        }            
-    } catch {
-      console.log("Error");
-    }
-  };
+  useEffect(() => {
+    dispatch(setCommentsCount(comments_count))
+    dispatch(getComments(0, id, authToken,usuari));
+  }, []);
 
-  useEffect(()=>{
-    getComments();
-  }, [refresh])
-    
-  const deleteComment = async (e, idcom) => {
-    try {
-      const data = await fetch("https://backend.insjoaquimmir.cat/api/posts/"+id+"/comments/"+idcom, {
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": 'Bearer '  + authToken,
-        },
-        method: "DELETE",
-    })
-      const resposta = await data.json();
-      console.log(resposta);
-      if (resposta.success == true){
-        setRefresh(!refresh);
-        setCommentAdd(false);
-      }else{
-        console.log("Error eliminando el comentario");
-        console.log(resposta.message);
-      }            
-    } catch {
-      console.log("Error");
-    }
-  };
 
   return(
     <>
@@ -75,14 +25,16 @@ export default function CommentsList() {
           <h1>Comments Post {id}</h1>
           <ul>
           {comments.map((comment) => (  
-            (<li key={comment.id} id="comments-list" className="comments-list"><Comment comment={comment} deleteComment={deleteComment}/></li>)
+            (<li key={comment.id} id="comments-list" className="comments-list"><Comment comment={comment} /></li>)
           ))} 
           </ul>
         </div>
       </div>
-      {commentAdd == false &&
-        <div><CommentAdd refresh={refresh} setRefresh={setRefresh}/></div> 
+      {add == true &&
+        <div><CommentAdd id={id}/></div> 
       }
     </>
   );
 }
+
+export default CommentsList

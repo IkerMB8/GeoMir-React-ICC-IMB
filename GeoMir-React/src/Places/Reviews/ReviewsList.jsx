@@ -1,72 +1,21 @@
 import React from 'react';
 import { UserContext } from "../../userContext";
 import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import ReviewAdd from "./ReviewAdd";
 import Review from "./Review";
+import { useDispatch, useSelector } from "react-redux";
+import { setReviewsCount } from "../../slices/places/reviews/reviewSlice";
+import { getReviews } from "../../slices/places/reviews/thunks";
 
-export default function ReviewsList() {
-  let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
-  let [ reviews, setReviews ] = useState([]);
-  const { id } = useParams();
-  let [ reviewAdd, setReviewAdd ] = useState(false);
-  let [refresh,setRefresh] = useState(false);
+export const ReviewsList = ({ id, reviews_count }) => {
+  let { usuari, setUsuari, authToken, setAuthToken } = useContext(UserContext);
+  const dispatch = useDispatch();
+  const { reviews=[], page=0, isLoading=true, add=true, error="", reviewsCount=0 } = useSelector((state) => state.reviews);
 
-  const getReviews = async (e) => {
-    try {
-        const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id+"/reviews", {
-            headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": 'Bearer '  + authToken,
-            },
-            method: "GET",
-        })
-        const resposta = await data.json();
-        console.log(resposta);
-        if (resposta.success == true){
-            console.log(resposta.data); 
-            resposta.data.map((review) => {
-              if (usuari == review.user.email){
-                setReviewAdd(true);
-              }
-            });
-            setReviews(resposta.data);
-        }else{
-            console.log("La resposta no ha triomfat");
-        }            
-    } catch {
-      console.log("Error");
-    }
-  };
-
-  useEffect(()=>{
-    getReviews();
-  }, [refresh])
-    
-  const deleteReview = async (e, idrev) => {
-    try {
-      const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id+"/reviews/"+idrev, {
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": 'Bearer '  + authToken,
-        },
-        method: "DELETE",
-    })
-      const resposta = await data.json();
-      console.log(resposta);
-      if (resposta.success == true){
-        setRefresh(!refresh);
-        setReviewAdd(false);
-      }else{
-        console.log("Error eliminando la review");
-        console.log(resposta.message);
-      }            
-    } catch {
-      console.log("Error");
-    }
-  };
+  useEffect(() => {
+    dispatch(setReviewsCount(reviews_count))
+    dispatch(getReviews(0, id, authToken,usuari));
+  }, []);
 
   return(
     <>
@@ -75,14 +24,16 @@ export default function ReviewsList() {
           <h1>Reviews Place {id}</h1>
           <ul>
           {reviews.map((review) => (  
-            (<li key={review.id} id="comments-list" className="comments-list"><Review review={review} deleteReview={deleteReview}/></li>)
+            (<li key={review.id} id="comments-list" className="comments-list"><Review review={review}/></li>)
           ))} 
           </ul>
         </div>
       </div>
-      {reviewAdd == false &&
-        <div><ReviewAdd refresh={refresh} setRefresh={setRefresh}/></div> 
+      {add == true &&
+        <div><ReviewAdd id={id}/></div> 
       }
     </>
   );
 }
+
+export default ReviewsList

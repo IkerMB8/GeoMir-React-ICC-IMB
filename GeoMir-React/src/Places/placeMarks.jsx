@@ -2,7 +2,7 @@ import React, { useEffect, useState, useReducer } from "react";
 // import { placeMarkReducer } from "./placeMarkReducer";
 import PlaceMark from "./placeMark";
 import { useSelector } from "react-redux";
-import { addmark, delmark } from "../slices/placeMarkSlice";
+import { addmark, delmark } from "../slices/places/placeMarkSlice";
 import { db } from "../firebase";
 import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 

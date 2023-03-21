@@ -2,7 +2,7 @@ import React, { useEffect, useState, useReducer } from "react";
 // import { postMarkReducer } from "./postMarkReducer";
 import PostMark from "./postMark";
 import { useSelector } from "react-redux";
-import { addpostmark, delpostmark } from "../slices/postMarkSlice";
+import { addpostmark, delpostmark } from "../slices/posts/postMarkSlice";
 import { db } from "../firebase";
 import {doc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 

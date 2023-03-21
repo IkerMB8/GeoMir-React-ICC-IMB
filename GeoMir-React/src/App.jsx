@@ -5,14 +5,14 @@ import { Routes, Route } from "react-router-dom";
 import { UserContext } from "./userContext";
 import Header from './Layout/Header';
 import Footer from "./Layout/Footer";
-import About from "./About";
+// import About from "./About";
 import PlacesList from "./Places/PlacesList";
 import Place from "./Places/Place";
 import PlacesAdd from "./Places/PlacesAdd";
 import PlacesEdit from "./Places/PlacesEdit";
 import PlacesGrid from "./Places/PlacesGrid";
 import PlacesMenu from "./Places/PlacesMenu";
-import ReviewsList from "./Places/Reviews/ReviewsList";
+// import ReviewsList from "./Places/Reviews/ReviewsList";
 import Post from "./Posts/Post";
 import PostsList from "./Posts/PostsList";
 import PostsGrid from "./Posts/PostsGrid";
@@ -28,8 +28,8 @@ import { db } from "./firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import { addtodostate, resetState } from "./slices/todoSlice";
-import { addmark, resetPlaceMarks } from "./slices/placeMarkSlice";
-import { addpostmark, resetPostMarks } from "./slices/postMarkSlice";
+import { addmark, resetPlaceMarks } from "./slices/places/placeMarkSlice";
+import { addpostmark, resetPostMarks } from "./slices/posts/postMarkSlice";
 
 export default function App() {
   
@@ -106,7 +106,7 @@ export default function App() {
               <Route path="/places/grid" element={<> <PlacesMenu/><PlacesGrid /> </>} />
               <Route path="/places/:id" element={<> <PlacesMenu/><Place/> </>} />
               <Route path="/places/edit/:id" element={<> <PlacesMenu/><PlacesEdit/> </>} />
-              <Route path="/places/:id/reviews" element={<> <PlacesMenu/><ReviewsList/> </>} />
+              {/* <Route path="/places/:id/reviews" element={<> <PlacesMenu/><ReviewsList/> </>} /> */}
               <Route path="/todos" element={<> <ToDos/> </>} />
               <Route path="/places/marks" element={<> <PlacesMenu/><PlaceMarks/> </>} />
               <Route path="/posts/marks" element={<> <PostsMenu/><PostMarks/> </>} />
