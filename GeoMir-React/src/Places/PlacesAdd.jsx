@@ -2,17 +2,14 @@ import React, { useEffect, useState, useContext } from 'react';
 import "./PlacesAdd.css";
 import { UserContext } from '../userContext';
 import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { addPlace } from "../slices/places/thunks";
 
 export default function PlacesAdd() {
-  let [formulari, setFormulari] = useState({});
-  let [error, setError] = useState("");
-  let [success, setSuccess] = useState("");
-  let {authToken, setAuthToken}=useContext(UserContext);
-  let {name,description,upload,latitude,longitude,visibility=1}=formulari;
-  let navigate = useNavigate();
+  let { authToken, setAuthToken } = useContext(UserContext);
+  const { error="", success="" } = useSelector((state) => state.places);
+  let [ formulari, setFormulari ] = useState({});
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -32,58 +29,20 @@ export default function PlacesAdd() {
 
   const sendPlace = async (e) => {
     e.preventDefault();
-    console.log(formulari);
-
-    var formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("upload", upload);
-    formData.append("latitude", latitude);
-    formData.append("longitude", longitude);
-    formData.append("visibility", visibility);
-
-    try {
-      const data = await fetch("https://backend.insjoaquimmir.cat/api/places", {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + authToken
-        },
-        method: "POST",
-        body: formData
-
-      })
-      const resposta = await data.json();
-      if (resposta.success === true){
-        console.log(resposta);
-        // alert("Place creado correctamente");
-        setSuccess("Place Creado Correctamente");
-        navigate("/places");
-        setFormulari({});
-      }else{
-        console.log(formulari)
-        setError(resposta.message);
-      } 
-        
-    }catch{
-      console.log("Error");
-      // alert("catch");
-    }
+    dispatch(addPlace(formulari, authToken));
+    setFormulari({});
   }
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition( (pos )=> {
-
+    navigator.geolocation.getCurrentPosition( (pos)=> {
       setFormulari({
         ...formulari,
         latitude :  pos.coords.latitude,
         longitude: pos.coords.longitude
-
       })
-      
       console.log("Latitude is :", pos.coords.latitude);
       console.log("Longitude is :", pos.coords.longitude);
     });
-  
   }, [])
 
   return <div className="contenido contenidoaddplace">

@@ -1,49 +1,22 @@
 import React from "react";
 import { UserContext } from "../userContext";
-import { useContext } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import "./PostsList.css";
 import PostList from "./PostList";
-import useFetch from "../hooks/useFetch";
+import { useDispatch, useSelector } from "react-redux";
+import { getPosts } from "../slices/posts/thunks";
 
 const PostsList = () => {
   let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
-  const { data, error, loading, setUrl, setOptions, refresh, setRefresh } = useFetch("https://backend.insjoaquimmir.cat/api/posts", {
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": 'Bearer '  + authToken,
-    },
-    method: "GET",
-  });
-
-  const deletePost = async (e, id) => {
-    try {
-      const data = await fetch("https://backend.insjoaquimmir.cat/api/posts/"+id, {
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": 'Bearer '  + authToken,
-        },
-        method: "DELETE",
-    })
-      const resposta = await data.json();
-      console.log(resposta);
-      if (resposta.success == true){
-        setRefresh(!refresh);
-      }else{
-        console.log("Error eliminando post");
-        console.log(resposta.message);
-      }            
-    } catch {
-      console.log("Error");
-    }
-  };
+  const { posts, page=0, isLoading=true, error="" } = useSelector((state) => state.posts);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getPosts(0, authToken));
+  }, []);
 
   return (
     <>
-      {loading ? 
+      {isLoading ? 
         <div className="contenidosvg">
           <svg  className="load" version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             width="40px" height="40px" viewBox="0 0 50 50" xmlSpace="preserve">
@@ -74,9 +47,9 @@ const PostsList = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((post) => (
+                {posts.map((post) => (
                   (post.visibility.name == 'public' || usuari == post.author.email) && 
-                  (<tr key={post.id}><PostList post={post} deletePost={deletePost}/></tr>)
+                  (<tr key={post.id}><PostList post={post} /></tr>)
                 ))}
               </tbody>
           </table>
