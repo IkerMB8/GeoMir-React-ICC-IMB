@@ -3,8 +3,13 @@ import "./PostGrid.css";
 import { Link } from 'react-router-dom';
 import { UserContext } from "../userContext";
 import { useContext } from "react";    
-export const PostGrid = ({post, deletePost}) => {
+import { delPost } from "../slices/posts/thunks";
+import { useDispatch } from "react-redux";
+
+export const PostGrid = ({post}) => {
   let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
+  const dispatch = useDispatch();
+  
   return (
     <>
       <div className="topp">
@@ -15,7 +20,7 @@ export const PostGrid = ({post, deletePost}) => {
           {usuari == post.author.email &&
           <div className='funciones'>
             <Link className="iconos" to={"/posts/edit/"+post.id} title="Editar"><i className="bi bi-pencil-square"></i></Link> 
-            <button onClick={(e) => {deletePost(e, post.id);}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button>
+            <button onClick={(e) => {dispatch(delPost(post.id, authToken));}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button>
           </div>}
         </div>
         <div>
@@ -28,7 +33,7 @@ export const PostGrid = ({post, deletePost}) => {
       <div className="funct">
         <div className="functizq">
           <i className="bi bi-heart"></i>
-          <Link to={"/posts/"+post.id+"/comments"}><i className="bi bi-chat"></i></Link>
+          <Link to={"/posts/"+post.id}><i className="bi bi-chat"></i></Link>
           <i className="bi bi-share"></i>
         </div>
         <div className="functder">

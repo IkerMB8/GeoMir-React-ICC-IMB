@@ -171,3 +171,16 @@ svg.load path,
 svg.load rect{
   fill: white;
 }
+
+.paglinks{
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.paglinks:hover{
+    background-color: rgb(89, 185, 89);
+}
+
+.linkactive{
+    background-color: green;
+}
