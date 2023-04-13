@@ -12,8 +12,8 @@ export const getPosts = (page = 0, authToken) => {
             method: "GET", 
         };
         const url = page > 0
-        ? "https://backend.insjoaquimmir.cat/api/places?paginate=1&page=" + page
-        : "https://backend.insjoaquimmir.cat/api/places";
+        ? "https://backend.insjoaquimmir.cat/api/posts?paginate=1&page=" + page
+        : "https://backend.insjoaquimmir.cat/api/posts";
         try{
             const data = await fetch(url, headers);
             const resposta = await data.json();
