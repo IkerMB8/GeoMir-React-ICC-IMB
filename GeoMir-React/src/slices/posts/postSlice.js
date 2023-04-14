@@ -17,6 +17,7 @@ const initialState = {
     },
     page: 1,
     pages: [],
+    filter: { body: "", author: ""}
 }
 export const postSlice = createSlice({
     name: "post",
@@ -47,10 +48,13 @@ export const postSlice = createSlice({
         },
         setPages: (state,action) => {
             state.pages = action.payload
+        },
+        setFilter: (state,action) => {
+            state.filter = action.payload;
         }
     }
 });
     
-export const { setLike, setSuccess, setError, setPosts, setPost, startLoadingPosts, setPage, setPages } = postSlice.actions;
+export const { setLike, setSuccess, setError, setPosts, setPost, startLoadingPosts, setPage, setPages, setFilter } = postSlice.actions;
 
 export default postSlice.reducer

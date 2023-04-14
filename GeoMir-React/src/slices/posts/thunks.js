@@ -1,7 +1,8 @@
-import { setLike, setSuccess, setError, setPosts, setPost, startLoadingPosts, setPage, setPages } from "./postSlice";
+import { setLike, setSuccess, setError, setPosts, setPost, startLoadingPosts, setPage, setPages, setFilter } from "./postSlice";
 
 export const getPosts = (page = 0, authToken) => {
     return async (dispatch, getState) => {
+        let filter = getState().posts.filter;
         dispatch(startLoadingPosts());
         const headers = {
             headers: {
@@ -11,9 +12,20 @@ export const getPosts = (page = 0, authToken) => {
             },
             method: "GET", 
         };
-        const url = page > 0
+
+        let url = page > 0
         ? "https://backend.insjoaquimmir.cat/api/posts?paginate=1&page=" + page
         : "https://backend.insjoaquimmir.cat/api/posts";
+        let primsimbolo = page > 0 ? "&" : "?";
+        let body = filter.body != "" ? "body="+filter.body : "";
+        let author = filter.author != "" ? "author="+filter.author : "";
+        if (body != "" && author != ""){
+            url = url+primsimbolo+body+"&"+author;
+        }else if (author != ""){
+            url = url+primsimbolo+author;
+        }else if (body != "" ){
+            url = url+primsimbolo+body;
+        }
         try{
             const data = await fetch(url, headers);
             const resposta = await data.json();

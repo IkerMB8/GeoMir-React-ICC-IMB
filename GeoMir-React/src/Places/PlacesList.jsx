@@ -8,11 +8,11 @@ import { getPlaces } from "../slices/places/thunks";
 
 export default function PlacesList() {
   let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
-  const { places, page=0, isLoading=true, error="" } = useSelector((state) => state.places);
+  const { places, page=0, isLoading=true, error="", filter } = useSelector((state) => state.places);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPlaces(0, authToken));
-  }, []);
+  }, [filter]);
 
   return(
     <>

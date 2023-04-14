@@ -1,7 +1,8 @@
-import { setFavorito, setSuccess, setError, setPlaces, setPlace, startLoadingPlaces, setPage, setPages } from "./placeSlice";
+import { setFavorito, setSuccess, setError, setPlaces, setPlace, startLoadingPlaces, setPage, setPages, setFilter } from "./placeSlice";
 
 export const getPlaces = (page = 0, authToken) => {
     return async (dispatch, getState) => {
+        let filter = getState().places.filter;
         dispatch(startLoadingPlaces());
         const headers = {
             headers: {
@@ -11,9 +12,20 @@ export const getPlaces = (page = 0, authToken) => {
             },
             method: "GET", 
         };
-        const url = page > 0
+
+        let url = page > 0
         ? "https://backend.insjoaquimmir.cat/api/places?paginate=1&page=" + page
         : "https://backend.insjoaquimmir.cat/api/places";
+        let primsimbolo = page > 0 ? "&" : "?";
+        let description = filter.description != "" ? "description="+filter.description : "";
+        let author = filter.author != "" ? "author="+filter.author : "";
+        if (description != "" && author != ""){
+            url = url+primsimbolo+description+"&"+author;
+        }else if (author != ""){
+            url = url+primsimbolo+author;
+        }else if (description != "" ){
+            url = url+primsimbolo+description;
+        }
         try {
             const data = await fetch(url, headers);
             const resposta = await data.json();

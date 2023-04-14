@@ -35,6 +35,7 @@ export default function App() {
   
   let [authToken, setAuthToken] = useState("");
   let [usuari, setUsuari] = useState("");
+  let [idUsuari, setIdUsuari] = useState("");
   // const todosCollection = collection(db, "ToDos");
   const placeMarksCollection = collection(db, "markPlaces");
   const placeMarksCollection2 = collection(db, "markPosts");
@@ -88,7 +89,7 @@ export default function App() {
 
   return (
     <>
-      <UserContext.Provider value= { { usuari, setUsuari,authToken,setAuthToken }}>
+      <UserContext.Provider value= { { usuari, setUsuari,authToken,setAuthToken, idUsuari, setIdUsuari }}>
         {authToken ? (
           <>
             <Header />

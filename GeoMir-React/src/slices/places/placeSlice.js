@@ -18,6 +18,7 @@ const initialState = {
     },
     page: 1,
     pages: [],
+    filter: { description: "", author: ""}
 }
 export const placeSlice = createSlice({
     name: "place",
@@ -44,14 +45,17 @@ export const placeSlice = createSlice({
             state.favorito = action.payload;
         },
         setPage: (state,action) => {
-            state.page = action.payload
+            state.page = action.payload;
         },
         setPages: (state,action) => {
-            state.pages = action.payload
+            state.pages = action.payload;
+        },
+        setFilter: (state,action) => {
+            state.filter = action.payload;
         }
     }
 });
 
-export const { setFavorito, setSuccess, setError, setPlaces, setPlace, startLoadingPlaces, setPage, setPages } = placeSlice.actions;
+export const { setFavorito, setSuccess, setError, setPlaces, setPlace, startLoadingPlaces, setPage, setPages, setFilter } = placeSlice.actions;
 
 export default placeSlice.reducer

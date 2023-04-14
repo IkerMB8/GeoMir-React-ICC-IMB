@@ -8,11 +8,11 @@ import { getPosts } from "../slices/posts/thunks";
 
 const PostsList = () => {
   let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
-  const { posts, page=0, isLoading=true, error="" } = useSelector((state) => state.posts);
+  const { posts, page=0, isLoading=true, error="", filter } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getPosts(0, authToken));
-  }, []);
+  }, [filter]);
 
   return (
     <>

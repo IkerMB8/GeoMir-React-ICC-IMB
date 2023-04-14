@@ -1,5 +1,14 @@
 .navPlace{
     background-color: #22203f;
+    height: 60px;
+}
+
+.navLinks{
+    float: left;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .navLink{
@@ -8,8 +17,47 @@
     background-color: transparent;
     text-decoration: none;
 }
+
 .navLink:hover{
     background-color: #1A1B30;
     text-decoration: none;
     color: #4371f7;
+}
+
+.search-container{
+  float: right;
+  display: flex;
+  justify-content: center;
+  width: auto;
+  height: 100%;
+  align-items: center;
+  padding-right: 15px;
+  float: right;
+  padding: 15px;
+}
+
+.search-container input{
+  height: 30px;
+  width: 200px;
+  padding-left: 10px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.search-container button {
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  height: 30px;
+  width: 40px;
+}
+
+.user{
+    background: rgb(123, 154, 240) !important;
+}
+
+.ultimoBotón{
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
