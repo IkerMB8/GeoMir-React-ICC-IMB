@@ -1,23 +1,31 @@
 import React from 'react'
 import { UserContext } from '../userContext';
 import { useState, useContext } from 'react';
-import useForm from "../hooks/useForm";
+// import useForm from "../hooks/useForm";
+import useLogin from "../hooks/useLogin";
+import { useForm } from "react-hook-form";
 
 export default function Register({ setCanvi }) {
-  let [error, setError] = useState("");
+  let [error, setError2] = useState("");
   let {authToken, setAuthToken, usuari, setUsuari}=useContext(UserContext);
-  const { formState, onInputChange, onResetForm } = useForm({
-    name: "",
-    email: "",
-    password: "",
-    password2: "",
-  });  
-  const {name,email,password,password2} = formState;
+  // const { formState, onInputChange, onResetForm } = useForm({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   password2: "",
+  // });  
+  // const {name,email,password,password2} = formState;
+  const { checkAuthToken } = useLogin(); 
+  const { register, handleSubmit } = useForm();
+  const onSubmit = data => handleRegister(data);
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const handleRegister = async (data) => {
+    let name = data.name;
+    let email = data.email;
+    let password = data.password;
+    let password2 = data.password2;
     if (password == password2){
-      alert("He enviat les Dades:  " + name +"/" +email +"/" + password + "/" +password2);
+      // alert("He enviat les Dades:  " + name +"/" +email +"/" + password + "/" +password2);
       // Enviam dades a l'aPI i recollim resultat
       try {
         const data = await fetch("https://backend.insjoaquimmir.cat/api/register", {
@@ -38,8 +46,9 @@ export default function Register({ setCanvi }) {
           if (! sessionStorage.getItem('token')){
             sessionStorage.setItem('token', resposta.authToken);
           }
+          checkAuthToken();
         }else{
-          setError(resposta.message);
+          setError2(resposta.message);
         } 
         // alert("He enviat les Dades:  " + email + "/" + password);
       } catch {
@@ -47,7 +56,7 @@ export default function Register({ setCanvi }) {
         //alert("catch");
       }
     }else{
-      setError("Las contraseñas no coinciden")
+      setError2("Las contraseñas no coinciden")
     }
   };
 
@@ -57,39 +66,44 @@ export default function Register({ setCanvi }) {
       
       <div className="grid">
 
-        <form method="POST" className="form login">
+        <form onSubmit={handleSubmit(onSubmit)} className="form login">
 
           <div className="form__field">
             <label htmlFor="login__username"><svg className="icon">
                 <use xlinkHref="#icon-user"></use>
               </svg><span className="hidden">Username</span></label>
-              <input className="form__input" name="name" id="username" type="text" placeholder="Username" onChange={(e) => {onInputChange(e); }}/>              
+              {/* <input className="form__input" name="name" id="username" type="text" placeholder="Username" onChange={(e) => {onInputChange(e); }}/>               */}
+              <input {...register("name")} className="form__input" id="username" type="text" placeholder="Username"/>              
           </div>
 
           <div className="form__field">
             <label htmlFor="login__username"><svg className="icon">
                 <use xlinkHref="#icon-user"></use>
               </svg><span className="hidden">Username</span></label>
-              <input className="form__input" name="email" id="email" type="mail" placeholder="Email" onChange={(e) => {onInputChange(e); }}/>      
+              {/* <input className="form__input" name="email" id="email" type="mail" placeholder="Email" onChange={(e) => {onInputChange(e); }}/>       */}
+              <input {...register("email")} className="form__input" id="email" type="mail" placeholder="Email"/>      
           </div>
 
           <div className="form__field">
             <label htmlFor="login__password"><svg className="icon">
                 <use xlinkHref="#icon-lock"></use>
               </svg><span className="hidden">Password</span></label>
-              <input className="form__input" name="password" id="password" type="password" placeholder="******************" onChange={(e) => {onInputChange(e); }}/>  
+              {/* <input className="form__input" name="password" id="password" type="password" placeholder="******************" onChange={(e) => {onInputChange(e); }}/>   */}
+              <input {...register("password")} className="form__input" id="password" type="password" placeholder="******************"/>  
           </div>
 
           <div className="form__field">
             <label htmlFor="login__password"><svg className="icon">
                 <use xlinkHref="#icon-lock"></use>
               </svg><span className="hidden">Password</span></label>
-              <input className="form__input" name="password2" id="confirm-password" type="password" placeholder="******************" onChange={(e) => {onInputChange(e); }}/>  
+              {/* <input className="form__input" name="password2" id="confirm-password" type="password" placeholder="******************" onChange={(e) => {onInputChange(e); }}/>   */}
+              <input {...register("password2")} className="form__input" id="confirm-password" type="password" placeholder="******************"/>  
           </div>
 
           {error ? <div className="error">{error}</div> : <></>}
           <div className="form__field">
-              <input onClick={(e) => {handleRegister(e);}} className="submit" type="submit" value="Regístrate"></input>
+              {/* <input onClick={(e) => {handleRegister(e);}} className="submit" type="submit" value="Regístrate"></input> */}
+              <input className="submit" type="submit" value="Regístrate"></input>
           </div>
 
         </form>

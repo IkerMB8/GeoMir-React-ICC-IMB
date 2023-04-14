@@ -36,8 +36,9 @@ export default function doLogin() {
     }, []);
 
     
-  const doLogin = async (e, email, password) => {
-    e.preventDefault();
+  const doLogin = async (data) => {
+    let email = data.email;
+    let password = data.password;
     try {
       const data = await fetch("https://backend.insjoaquimmir.cat/api/login", {
         headers: {
@@ -67,5 +68,5 @@ export default function doLogin() {
     }
   };
 
-  return { doLogin, error, setError };
+  return { doLogin, error, setError, checkAuthToken };
 }

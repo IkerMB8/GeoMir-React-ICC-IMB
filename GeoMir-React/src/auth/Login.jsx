@@ -1,40 +1,45 @@
 import React from "react";
 import { UserContext } from "../userContext";
 import { useState , useContext } from "react";
-import useForm from "../hooks/useForm";
+// import useForm from "../hooks/useForm";
 import useLogin from "../hooks/useLogin";
+import { useForm } from "react-hook-form";
 
 export default function Login({ setCanvi }) {
   let {authToken, setAuthToken, usuari, setUsuari} = useContext(UserContext);
-  const { formState, onInputChange, onResetForm } = useForm({
-    email: "",
-    password: "",
-  });  
+  // const { formState, onInputChange, onResetForm } = useForm({
+  //   email: "",
+  //   password: "",
+  // });  
+  // const { email, password } = formState;
+  const { register, handleSubmit } = useForm();
   const { doLogin, error, setError } = useLogin();  
-  const { email, password } = formState;
+  const onSubmit = data => doLogin(data);
 
   return (
     <>
       <div>
         <h1>Login</h1>
         <div className="grid">
-          <form method="POST" className="form login">
+          <form onSubmit={handleSubmit(onSubmit)} className="form login">
             <div className="form__field">
               <label htmlFor="login__username"><svg className="icon">
                   <use xlinkHref="#icon-user"></use>
                 </svg><span className="hidden">Username</span></label>
-                <input id="username" type="text" name="email" className="form__input" placeholder="Email" onChange={(e) => {onInputChange(e); }} />              
+                {/* <input id="username" type="text" name="email" className="form__input" placeholder="Email" onChange={(e) => {onInputChange(e); }} /> */}
+                <input {...register("email")} id="username" type="text" className="form__input" placeholder="Email"/>                
             </div>
             <div className="form__field">
               <label htmlFor="login__password"><svg className="icon">
                   <use xlinkHref="#icon-lock"></use>
                 </svg><span className="hidden">Password</span></label>
-                
-                <input id="password" type="password" name="password" className="form__input" placeholder="Password" onChange={(e) => {onInputChange(e);}} />
+                {/* <input id="password" type="password" name="password" className="form__input" placeholder="Password" onChange={(e) => {onInputChange(e);}} /> */}
+                <input {...register("password")} id="password" type="password" className="form__input" placeholder="Password"/>
             </div>
             {error ? <div className="error">{error}</div> : <></>}
             <div className="form__field">
-                <input onClick={(e) => {doLogin(e, email, password);}} className="submit" type="submit" value="Iniciar Sesión"></input>
+                {/* <input onClick={(e) => {doLogin(e, email, password);}} className="submit" type="submit" value="Iniciar Sesión"></input> */}
+                <input className="submit" type="submit" value="Iniciar Sesión"></input>
             </div>
           </form>
           <p className="text--center">¿No tienes cuenta? <a href="#" onClick={() => {setCanvi(false);}} > Regístrate</a>
