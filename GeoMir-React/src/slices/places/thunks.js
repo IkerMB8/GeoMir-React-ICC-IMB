@@ -41,7 +41,7 @@ export const getPlaces = (page = 0, authToken) => {
                 dispatch(setError(resposta.message));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -67,12 +67,12 @@ export const getPlace = (id, authToken) => {
                 dispatch(setError(resposta.message));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
 
-export const delPlace = (id, authToken) => {
+export const delPlace = (id, authToken, navigate) => {
     return async (dispatch, getState) => {
         try {
             const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id, {
@@ -86,13 +86,13 @@ export const delPlace = (id, authToken) => {
             const resposta = await data.json();
             if (resposta.success == true) {
                 console.log("Place Deleted Succesfully");
-                dispatch(getPlaces(0,authToken))
+                dispatch(getPlaces(0,authToken));
             }else{
                 console.log("Error eliminando place");
                 dispatch(setError(resposta.message));
             }  
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 };
@@ -110,13 +110,12 @@ export const addPlace = (place, authToken) => {
     return async (dispatch, getState) => {
         try {
             const data = await fetch("https://backend.insjoaquimmir.cat/api/places", {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + authToken
-            },
-            method: "POST",
-            body: formData
-    
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + authToken
+                },
+                method: "POST",
+                body: formData
             })
             const resposta = await data.json();
             if (resposta.success == true) {
@@ -124,10 +123,10 @@ export const addPlace = (place, authToken) => {
                 dispatch(setSuccess("Place Creado Correctamente"));
                 dispatch(getPlaces(0,authToken));
             }else{
-                setError(resposta.message)
+                dispatch(setError(resposta.message));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -137,7 +136,9 @@ export const editPlace = (place, authToken, id) => {
     var formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("upload", upload);
+    if (upload != undefined){
+        formData.append("upload", upload);
+    }
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
     formData.append("visibility", visibility);
@@ -161,10 +162,10 @@ export const editPlace = (place, authToken, id) => {
                 dispatch(getPlaces(0,authToken));
                 dispatch(getPlace(id,authToken));
             }else{
-                setError(resposta.message)
+                dispatch(setError(resposta.message));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -189,7 +190,7 @@ export const favorite = (id, authToken) => {
                 console.log("Ya tienes en favoritos este lugar");
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -214,7 +215,7 @@ export const unfavorite = (id, authToken) => {
                 console.log("No tienes en favoritos este lugar");
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -239,7 +240,7 @@ export const comprobarFavorito = (id, authToken) => {
                 dispatch(setFavorito(true));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }

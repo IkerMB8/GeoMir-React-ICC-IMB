@@ -72,36 +72,36 @@ export default function PostsEdit(){
     <h1>PostEdit</h1>
     <form method='POST' onSubmit={(e) => {sendPostEdit(e);}} className="material-form">
       <div className="material-form__container">
-        <input className="material-form__input" name="body" type="text" placeholder=" " id="body" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{10,40}" maxlength="40" value={formulari.body} onChange={handleChange}/>
+        <input className="material-form__input" name="body" type="text" placeholder=" " id="body" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{10,40}" maxLength="40" value={formulari.body} onChange={handleChange}/>
         <label className="material-form__label" htmlFor="body">Body</label>
         <div className="material-form__focus-animation"></div>
         <p className="material-form__error">Body no válido</p>
       </div>
       <div className="material-form__container">
-        <input className="material-form__input" name="upload" type="file" placeholder=" " id="file" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{10,40}" maxlength="50" onChange={handleChange} required/>
+        <input className="material-form__input" name="upload" type="file" placeholder=" " id="file" pattern="[a-zA-Z ñÑáàéèíìóòúùÁÉÍÓÚÀÈÌÒÙ 0-9 .,;:-_]{10,40}" maxLength="50" onChange={handleChange} required/>
         <label className="material-form__label" htmlFor="upload">File</label>
         <div className="material-form__focus-animation"></div>
         {/* <p className="material-form__error">File no válido</p> */}
       </div>
       <div className="material-form__container">
-        <input className="material-form__input" name="latitude" type="number" placeholder=" " id="latitude" maxlength="50" value={formulari.latitude} onChange={handleChange}/>
+        <input className="material-form__input" name="latitude" type="number" placeholder=" " id="latitude" maxLength="50" value={formulari.latitude} onChange={handleChange}/>
         <label className="material-form__label" htmlFor="latitude">Latitude</label>
         <div className="material-form__focus-animation"></div>
         <p className="material-form__error">Latitude no válido</p>
       </div>
       <div className="material-form__container">
-        <input className="material-form__input" name="longitude" type="number" placeholder=" " id="longitude" maxlength="50" value={formulari.longitude} onChange={handleChange}/>
+        <input className="material-form__input" name="longitude" type="number" placeholder=" " id="longitude" maxLength="50" value={formulari.longitude} onChange={handleChange}/>
         <label className="material-form__label" htmlFor="longitude">Longitude</label>
         <div className="material-form__focus-animation"></div>
         <p className="material-form__error">Longitude no válido</p>
       </div>
       <div className="material-form__container">
-        <select className="material-form__input" for="visibility" name="visibility" type="option" placeholder=" " id="visibility" value={formulari.visibility} onChange={handleChange}>
-          <option>Public</option>
-          <option>Private</option>
-          <option>Contacts</option>
+        <select step={"any"} className="material-form__input visibilidad" id="visibility" name="visibility" value={formulari.visibility} onChange={handleChange}>
+          <option value="1" >Public</option>
+          <option value="3" >Private</option>
+          <option value="2" >Contacts</option>
         </select>
-        <label className="material-form__label" for="pvisibility_id">Visibility ID</label>
+        <label className="material-form__label" htmlFor="pvisibility_id">Visibility ID</label>
         <p className="material-form__error">Visibility ID no válido</p>
       </div>
       <div className='botones'>

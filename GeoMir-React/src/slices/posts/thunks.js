@@ -41,7 +41,7 @@ export const getPosts = (page = 0, authToken) => {
                 dispatch(setError(resposta.message));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -67,7 +67,7 @@ export const getPost = (id, authToken) => {
                 dispatch(setError(resposta.message));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -92,7 +92,7 @@ export const delPost = (id, authToken) => {
                 dispatch(setError(resposta.message));
             }  
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 };
@@ -123,10 +123,10 @@ export const addPost = (post, authToken) => {
                 dispatch(setSuccess("Post Creado Correctamente"));
                 dispatch(getPosts(0,authToken));
             }else{
-                setError(resposta.message)
+                dispatch(setError(resposta.message));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -135,7 +135,9 @@ export const editPost = (post, authToken, id) => {
     let {body,upload,latitude,longitude,visibility}=post;
     var formData = new FormData();
     formData.append("body", body);
-    formData.append("upload", upload);
+    if (upload != undefined){
+        formData.append("upload", upload);
+    }
     formData.append("latitude", latitude);
     formData.append("longitude", longitude);
     formData.append("visibility", visibility);
@@ -159,10 +161,10 @@ export const editPost = (post, authToken, id) => {
                 dispatch(getPosts(0,authToken));
                 dispatch(getPost(id,authToken));
             }else{
-                setError(resposta.message)
+                dispatch(setError(resposta.message));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -187,7 +189,7 @@ export const likePost = (id, authToken) => {
                 console.log("Ya has dado like a este post");
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -212,7 +214,7 @@ export const unlike = (id, authToken) => {
                 console.log("No has dado like a este post");
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }
@@ -237,7 +239,7 @@ export const comprobarLike = (id, authToken) => {
                 dispatch(setLike(true));
             }
         } catch (e) {
-            setError(e);
+            dispatch(setError(e));
         }
     };
 }

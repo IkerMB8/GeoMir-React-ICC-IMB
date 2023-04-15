@@ -76,10 +76,10 @@ export default function PostsAdd() {
         <p className="material-form__error">Longitude no válido</p>
       </div>
       <div className="material-form__container">
-        <select className="material-form__input" htmlFor="visibility" name="visibility" type="option" placeholder=" " id="visibility" value={formulari.visibility} onChange={handleChange}>
-          <option>Public</option>
-          <option>Private</option>
-          <option>Contacts</option>
+        <select step={"any"} className="material-form__input visibilidad" id="visibility" name="visibility" value={formulari.visibility} onChange={handleChange}>
+          <option value="1" >Public</option>
+          <option value="3" >Private</option>
+          <option value="2" >Contacts</option>
         </select>
         <label className="material-form__label" htmlFor="pvisibility_id">Visibility ID</label>
         <p className="material-form__error">Visibility ID no válido</p>

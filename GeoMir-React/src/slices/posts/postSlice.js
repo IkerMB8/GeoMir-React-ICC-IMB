@@ -2,11 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     posts: [],
-    page: 0,
     isLoading: false,
     error: "",
     success: "",
-    like: "",
+    like: false,
     post: {
         body: "",
         file: { filepath: "" },

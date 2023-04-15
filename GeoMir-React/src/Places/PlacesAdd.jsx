@@ -80,7 +80,7 @@ export default function PlacesAdd() {
                 <p className="material-form__error">Longitud no válido</p>
               </div>
               <div className="material-form__container">
-              <select step={"any"} className="material-form__input visibilidad" id="visibility" name="visibility" value={formulari.visibility} onChange={handleChange}>
+                <select step={"any"} className="material-form__input visibilidad" id="visibility" name="visibility" value={formulari.visibility} onChange={handleChange}>
                   <option value="1" >Public</option>
                   <option value="3" >Private</option>
                   <option value="2" >Contacts</option>

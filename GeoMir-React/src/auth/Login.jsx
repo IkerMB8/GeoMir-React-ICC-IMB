@@ -12,7 +12,7 @@ export default function Login({ setCanvi }) {
   //   password: "",
   // });  
   // const { email, password } = formState;
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const { doLogin, error, setError } = useLogin();  
   const onSubmit = data => doLogin(data);
 
@@ -27,15 +27,43 @@ export default function Login({ setCanvi }) {
                   <use xlinkHref="#icon-user"></use>
                 </svg><span className="hidden">Username</span></label>
                 {/* <input id="username" type="text" name="email" className="form__input" placeholder="Email" onChange={(e) => {onInputChange(e); }} /> */}
-                <input {...register("email")} id="username" type="text" className="form__input" placeholder="Email"/>                
+                <input {...register("email", {
+                    required: "Aquest camp és obligatori",
+                    minLength: {
+                      value: 6,
+                      message: "El email ha de tenir al menys 6 caràcters"
+                    },
+                    maxLength: {
+                      value: 40,
+                      message: "El email ha de tenir com a màxim 40 caràcters"
+                    },
+                    pattern: {
+                      value: /^[a-zA-Z0-9._%+-]+@fp\.insjoaquimmir\.cat$/,
+                      message: "El email tiene que ser del dominio @fp.insjoaquimmir.cat" 
+                    }})} id="username" type="text" className="form__input" placeholder="Email"/>                
             </div>
+            {errors.email ? <div className="error">{errors.email.message}</div> : <></>}
             <div className="form__field">
               <label htmlFor="login__password"><svg className="icon">
                   <use xlinkHref="#icon-lock"></use>
                 </svg><span className="hidden">Password</span></label>
                 {/* <input id="password" type="password" name="password" className="form__input" placeholder="Password" onChange={(e) => {onInputChange(e);}} /> */}
-                <input {...register("password")} id="password" type="password" className="form__input" placeholder="Password"/>
+                <input {...register("password", {
+                    required: "Aquest camp és obligatori",
+                    minLength: {
+                      value: 8,
+                      message: "La contrasenya ha de tenir al menys 8 caràcters"
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "La contrasenya ha de tenir com a màxim 20 caràcters"
+                    },
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                      message: "La contrasenya ha de contenir al menys una minúscula, una majúscula, i un número" 
+                    }})} id="password" type="password" className="form__input" placeholder="Password"/>
             </div>
+            {errors.password ? <div className="error">{errors.password.message}</div> : <></>}
             {error ? <div className="error">{error}</div> : <></>}
             <div className="form__field">
                 {/* <input onClick={(e) => {doLogin(e, email, password);}} className="submit" type="submit" value="Iniciar Sesión"></input> */}

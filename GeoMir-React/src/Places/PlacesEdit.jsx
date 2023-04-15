@@ -86,7 +86,7 @@ export default function PlacesEdit() {
                 <p className="material-form__error">Descripción no válido</p>
               </div>
               <div className="material-form__container">
-                <input className="material-form__input" type="file" placeholder=" " id="upload" name="upload" maxLength="40" onChange={handleChange} required/>
+                <input className="material-form__input" type="file" placeholder=" " id="upload" name="upload" maxLength="40" onChange={handleChange}/>
                 <label className="material-form__label" htmlFor="upload">Archivo</label>
                 <div className="material-form__focus-animation"></div>
                 {/* <p className="material-form__error">Archivo no válido</p> */}

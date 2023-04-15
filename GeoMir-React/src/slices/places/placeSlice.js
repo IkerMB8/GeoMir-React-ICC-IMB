@@ -2,11 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     places: [],
-    page: 0,
     isLoading: false,
     error: "",
     success: "",
-    favorito: "",
+    favorito: false,
     place: {
         name: "",
         description: "",
