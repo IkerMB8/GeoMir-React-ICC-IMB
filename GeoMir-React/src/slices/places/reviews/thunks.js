@@ -56,7 +56,8 @@ export const delReview = (review, authToken) => {
     };
 };
 
-export const addReview = (id, review, authToken) => {
+export const addReview = (id, data, authToken) => {
+    let review = data.review;
     return async (dispatch, getState) => {
         const data = await fetch("https://backend.insjoaquimmir.cat/api/places/"+id+"/reviews", {
             headers: {
