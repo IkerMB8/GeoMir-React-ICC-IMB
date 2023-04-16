@@ -1,4 +1,4 @@
-import { setAdd, setError, setReviews, setReviewsCount, startLoadingReviews } from "./reviewSlice";
+import { setAdd, setError, setReviews, setReviewsCount, startLoadingReviews, setPage, setPages } from "./reviewSlice";
 
 export const getReviews = (page = 0, id, authToken, usuari="") => {
     return async (dispatch, getState) => {
@@ -11,20 +11,33 @@ export const getReviews = (page = 0, id, authToken, usuari="") => {
             },
             method: "GET", 
         };
-        const url = "https://backend.insjoaquimmir.cat/api/places/" + id + "/reviews"
+        let url = page > 0
+        ? "https://backend.insjoaquimmir.cat/api/places/"+id+"/reviews?paginate=1&page=" + page
+        : "https://backend.insjoaquimmir.cat/api/places/"+id+"/reviews";
         const data = await fetch(url, headers );
         const resposta = await data.json();
         if (resposta.success == true) {
-            dispatch(setReviews(resposta.data));
+            if (page > 0) {
+                dispatch(setReviews(resposta.data.collection));
+                dispatch(setPages(resposta.data.links));
+                resposta.data.collection.map((v) => {
+                    if (v.user.email === usuari) {
+                        dispatch (setAdd(false));
+                        console.log("Te review");
+                    }
+                });
+            } else {
+                dispatch(setReviews(resposta.data));
+                resposta.data.map((v) => {
+                    if (v.user.email === usuari) {
+                        dispatch (setAdd(false));
+                        console.log("Te review");
+                    }
+                });
+            }
         } else {
             dispatch(setError(resposta.message));
         }
-        resposta.data.map((v) => {
-            if (v.user.email === usuari) {
-                dispatch (setAdd(false));
-                console.log("Te review");
-            }
-        });
     };
 }
 

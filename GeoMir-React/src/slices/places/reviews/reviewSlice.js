@@ -2,11 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     reviews: [],
-    page: 0,
+    page: 1,
     isLoading: false,
     add: true,
     error: "",
-    reviewsCount : 0
+    reviewsCount : 0,
+    pages: [],
 }
 export const reviewSlice = createSlice({
 
@@ -28,10 +29,16 @@ export const reviewSlice = createSlice({
         },
         setReviewsCount: (state,action) => {
             state.reviewsCount = action.payload
-        }
+        },
+        setPage: (state,action) => {
+            state.page = action.payload
+        },
+        setPages: (state,action) => {
+            state.pages = action.payload
+        },
     }
 });
     
-export const { startLoadingReviews,setReviews,setAdd,setError,setReviewsCount } = reviewSlice.actions;
+export const { startLoadingReviews,setReviews,setAdd,setError,setReviewsCount, setPage, setPages } = reviewSlice.actions;
 
 export default reviewSlice.reducer

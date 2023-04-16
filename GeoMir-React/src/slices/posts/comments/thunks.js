@@ -1,4 +1,4 @@
-import { setAdd, setError, setComments, setCommentsCount, startLoadingComments } from "./CommentSlice";
+import { setAdd, setError, setComments, setCommentsCount, startLoadingComments, setPage, setPages } from "./commentSlice";
 
 export const getComments = (page = 0, id, authToken, usuari="") => {
     return async (dispatch, getState) => {
@@ -11,20 +11,33 @@ export const getComments = (page = 0, id, authToken, usuari="") => {
             },
             method: "GET", 
         };
-        const url = "https://backend.insjoaquimmir.cat/api/posts/" + id + "/comments"
+        let url = page > 0
+        ? "https://backend.insjoaquimmir.cat/api/posts/" + id + "/comments?paginate=1&page=" + page
+        : "https://backend.insjoaquimmir.cat/api/posts/"+id+"/comments";
         const data = await fetch(url, headers );
         const resposta = await data.json();
         if (resposta.success == true) {
-            dispatch(setComments(resposta.data));
+            if (page > 0) {
+                dispatch(setComments(resposta.data.collection));
+                dispatch(setPages(resposta.data.links));
+                resposta.data.collection.map((v) => {
+                    if (v.user.email === usuari) {
+                        dispatch (setAdd(false));
+                        console.log("Te comment");
+                    }
+                });
+            } else {
+                dispatch(setComments(resposta.data));
+                resposta.data.map((v) => {
+                    if (v.user.email === usuari) {
+                        dispatch (setAdd(false));
+                        console.log("Te comment");
+                    }
+                });
+            }
         } else {
             dispatch(setError(resposta.message));
         }
-        resposta.data.map((v) => {
-            if (v.user.email === usuari) {
-                dispatch (setAdd(false));
-                console.log("Te comment");
-            }
-        });
     };
 }
 

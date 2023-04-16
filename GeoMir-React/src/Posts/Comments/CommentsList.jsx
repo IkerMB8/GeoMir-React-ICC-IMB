@@ -4,8 +4,9 @@ import { useContext, useState, useEffect } from "react";
 import CommentAdd from "./CommentAdd";
 import Comment from "./Comment";
 import { useDispatch, useSelector } from "react-redux";
-import { setCommentsCount } from "../../slices/posts/comments/commentslice";
+import { setCommentsCount } from "../../slices/posts/comments/commentSlice";
 import { getComments } from "../../slices/posts/comments/thunks";
+import Paginate from './Paginate';
 
 export const CommentsList = ({ id, comments_count }) => {
   let { usuari, setUsuari, authToken, setAuthToken } = useContext(UserContext);
@@ -14,13 +15,14 @@ export const CommentsList = ({ id, comments_count }) => {
 
   useEffect(() => {
     dispatch(setCommentsCount(comments_count))
-    dispatch(getComments(0, id, authToken,usuari));
-  }, []);
+    dispatch(getComments(page, id, authToken,usuari));
+  }, [page]);
 
 
   return(
     <>
       <div className="contenido">
+        <Paginate />
         <div className="comments-container">
           <h1>Comments Post {id}</h1>
           <ul>
@@ -29,6 +31,7 @@ export const CommentsList = ({ id, comments_count }) => {
           ))} 
           </ul>
         </div>
+        <Paginate />
       </div>
       {add == true &&
         <div><CommentAdd id={id}/></div> 
