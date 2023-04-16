@@ -97,7 +97,7 @@ export const delPost = (id, authToken) => {
     };
 };
 
-export const addPost = (post, authToken) => {
+export const addPost = (post, authToken, navigate) => {
     let {body,upload,latitude,longitude,visibility=1}=post;
     var formData = new FormData();
     formData.append("body", body);
@@ -122,6 +122,8 @@ export const addPost = (post, authToken) => {
                 console.log("Post Created Succesfully");
                 dispatch(setSuccess("Post Creado Correctamente"));
                 dispatch(getPosts(0,authToken));
+                dispatch(setSuccess(""));
+                navigate("/posts/"+resposta.data.id)
             }else{
                 dispatch(setError(resposta.message));
             }
@@ -185,6 +187,7 @@ export const likePost = (id, authToken) => {
             const resposta = await data.json();
             if (resposta.success == true) {
                 dispatch(setLike(true));
+                dispatch(getPost(id, authToken));
             } else {
                 console.log("Ya has dado like a este post");
             }
@@ -210,6 +213,7 @@ export const unlike = (id, authToken) => {
             const resposta = await data.json();
             if (resposta.success == true) {
                 dispatch(setLike(false));
+                dispatch(getPost(id, authToken));
             } else {
                 console.log("No has dado like a este post");
             }

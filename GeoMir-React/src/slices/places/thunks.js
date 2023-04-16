@@ -1,3 +1,4 @@
+import { getPost } from "../posts/thunks";
 import { setFavorito, setSuccess, setError, setPlaces, setPlace, startLoadingPlaces, setPage, setPages, setFilter } from "./placeSlice";
 
 export const getPlaces = (page = 0, authToken) => {
@@ -97,7 +98,7 @@ export const delPlace = (id, authToken, navigate) => {
     };
 };
 
-export const addPlace = (place, authToken) => {
+export const addPlace = (place, authToken, navigate) => {
     let {name,description,upload,latitude,longitude,visibility=1}=place;
     var formData = new FormData();
     formData.append("name", name);
@@ -122,6 +123,8 @@ export const addPlace = (place, authToken) => {
                 console.log("place Created Succesfully");
                 dispatch(setSuccess("Place Creado Correctamente"));
                 dispatch(getPlaces(0,authToken));
+                dispatch(setSuccess(""));
+                navigate("/places/"+resposta.data.id)
             }else{
                 dispatch(setError(resposta.message));
             }
@@ -186,6 +189,7 @@ export const favorite = (id, authToken) => {
             const resposta = await data.json();
             if (resposta.success == true) {
                 dispatch(setFavorito(true));
+                dispatch(getPlace(id,authToken));
             } else {
                 console.log("Ya tienes en favoritos este lugar");
             }
@@ -211,6 +215,7 @@ export const unfavorite = (id, authToken) => {
             const resposta = await data.json();
             if (resposta.success == true) {
                 dispatch(setFavorito(false));
+                dispatch(getPlace(id,authToken));
             } else {
                 console.log("No tienes en favoritos este lugar");
             }
