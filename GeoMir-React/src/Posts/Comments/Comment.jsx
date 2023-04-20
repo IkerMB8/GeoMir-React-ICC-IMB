@@ -1,14 +1,19 @@
+import "./comment.css";
 import React from 'react';
 import { UserContext } from "../../userContext";
 import { useContext } from "react";
-import "./comment.css";
 import TimeAgo from 'react-timeago';
+import { useDispatch, useSelector } from "react-redux";
 import spanishStrings from 'react-timeago/lib/language-strings/es';
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter';
+import { delComment } from "../../slices/posts/comments/thunks";
 
-export const Comment = ({comment, deleteComment}) => {   
+export const Comment = ({comment}) => {  
+    const { usuari,setUsuari, authToken, setAuthToken } = useContext(UserContext);
+    const { comments = [], page=0, isLoading=true, add=true, error="", commentsCount=0 } =
+    useSelector((state) => state.comments);
+    const dispatch = useDispatch();
     const formatter = buildFormatter(spanishStrings); 
-    let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
     return(
         <>
                 <div className="comment-main-level">
@@ -20,7 +25,7 @@ export const Comment = ({comment, deleteComment}) => {
                             <h6 className="comment-name">{comment.user.name}</h6>
                             <span><TimeAgo date={comment.created_at} formatter={formatter} /></span>
                             {usuari == comment.user.email &&
-                                <button onClick={(e) => {deleteComment(e, comment.id);}} className="delete iconos reviewdelete" title="Eliminar" type="submit"><i className="bi bi-trash3"></i></button>
+                                <button onClick={(e) => {dispatch(delComment(comment,authToken));}} className="delete iconos reviewdelete" title="Eliminar" type="submit"><i className="bi bi-trash3"></i></button>
                             }
                         </div>
                         <div className="comment-content">
