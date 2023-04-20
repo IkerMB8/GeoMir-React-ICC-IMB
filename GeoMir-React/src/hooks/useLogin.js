@@ -3,7 +3,7 @@ import { UserContext } from "../userContext";
 
 export default function doLogin() {
     let [error, setError] = useState("");
-    let {authToken, setAuthToken, usuari, setUsuari} = useContext(UserContext);
+    let {authToken, setAuthToken, usuari, setUsuari, idUsuari, setIdUsuari} = useContext(UserContext);
 
     const checkAuthToken = async () => {
         if (sessionStorage.getItem('token')){
@@ -21,6 +21,7 @@ export default function doLogin() {
                 if (resposta.success === true) {
                     setAuthToken(sessionStorage.getItem('token'));
                     setUsuari(resposta.user.email);
+                    setIdUsuari(resposta.user.id);
                     // console.log(resposta.user.email)
                 }else{
                     console.log("La resposta no ha triomfat");
@@ -35,8 +36,9 @@ export default function doLogin() {
     }, []);
 
     
-  const doLogin = async (e, email, password) => {
-    e.preventDefault();
+  const doLogin = async (data) => {
+    let email = data.email;
+    let password = data.password;
     try {
       const data = await fetch("https://backend.insjoaquimmir.cat/api/login", {
         headers: {
@@ -54,6 +56,7 @@ export default function doLogin() {
         if (! sessionStorage.getItem('token')){
           sessionStorage.setItem('token', resposta.authToken);
         }
+        checkAuthToken();
       }else{ 
         setError(resposta.message);
         // else alert("La resposta no ha triomfat");
@@ -65,5 +68,5 @@ export default function doLogin() {
     }
   };
 
-  return { doLogin, error, setError };
+  return { doLogin, error, setError, checkAuthToken };
 }

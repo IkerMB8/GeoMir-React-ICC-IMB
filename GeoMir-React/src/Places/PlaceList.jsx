@@ -3,9 +3,13 @@ import "./PlaceList.css";
 import { Link } from 'react-router-dom';
 import { UserContext } from "../userContext";
 import { useContext } from "react";
+import { delPlace } from "../slices/places/thunks";
+import { useDispatch } from "react-redux";
 
-export const PlaceList = ({place, deletePlace}) => {    
+export const PlaceList = ({place}) => {    
     let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
+    const dispatch = useDispatch();
+
     return(
         <>
             <td className='num'>{place.id}</td>
@@ -22,7 +26,7 @@ export const PlaceList = ({place, deletePlace}) => {
                 <td><Link className="iconos" to={"/places/edit/"+place.id} title="Editar"><i className="bi bi-pencil-square"></i></Link></td> 
             }
             {usuari == place.author.email &&
-                <td><button onClick={(e) => {deletePlace(e, place.id);}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button></td>
+                <td><button onClick={(e) => {dispatch(delPlace(place.id, authToken));}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button></td>
             }
         </>
     )

@@ -3,8 +3,13 @@ import "./PlaceGrid.css";
 import { Link } from 'react-router-dom';
 import { UserContext } from "../userContext";
 import { useContext } from "react";
-export const PlaceGrid = ({place, deletePlace}) => {    
+import { delPlace } from "../slices/places/thunks";
+import { useDispatch } from "react-redux";
+
+export const PlaceGrid = ({place}) => {    
     let { authToken, setAuthToken, usuari, setUsuari } = useContext(UserContext);
+    const dispatch = useDispatch();
+
     return(
         <>
             <div className="topp">
@@ -15,7 +20,7 @@ export const PlaceGrid = ({place, deletePlace}) => {
                     {usuari == place.author.email &&
                     <div className='funciones'>
                         <Link className="iconos" to={"/places/edit/"+place.id} title="Editar"><i className="bi bi-pencil-square"></i></Link> 
-                        <button onClick={(e) => {deletePlace(e, place.id);}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button>
+                        <button onClick={(e) => {dispatch(delPlace(place.id, authToken));}} title="Eliminar" type="submit" className="delete iconos"><i className="bi bi-trash3"></i></button>
                     </div>}
                 </div>
                 <div>
@@ -28,7 +33,7 @@ export const PlaceGrid = ({place, deletePlace}) => {
             <div className="funct">
                 <div className="functizq">
                     <i className="bi bi-star"></i>
-                    <Link to={"/places/"+place.id+"/reviews"}><i className="bi bi-chat"></i></Link>
+                    <Link to={"/places/"+place.id}><i className="bi bi-chat"></i></Link>
                     <i className="bi bi-share"></i>
                 </div>
                 <div className="functder">
