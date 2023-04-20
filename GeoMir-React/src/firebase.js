@@ -1,20 +1,28 @@
-// Import the functions you need from the SDKs you need
+/**
+* Engega la Firebase i configura la bdd Firestore.
+* @module firebase
+* @function
+* @returns {Object} La bdd Firestore.
+*/
+
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
+// Firebase configuration object with API key and project details
 const firebaseConfig = {
-  apiKey: "AIzaSyCmWOygQeV1iJksyFBHw-K0bDvsaaQABpU",
-  authDomain: "geomir-react-imb-icc.firebaseapp.com",
-  projectId: "geomir-react-imb-icc",
-  storageBucket: "geomir-react-imb-icc.appspot.com",
-  messagingSenderId: "335472113752",
-  appId: "1:335472113752:web:b312a5d7016386aa50b22d"
+  apiKey: "<API_KEY>",
+  authDomain: "<AUTH_DOMAIN>",
+  projectId: "<PROJECT_ID>",
+  storageBucket: "<STORAGE_BUCKET>",
+  messagingSenderId: "<MESSAGING_SENDER_ID>",
+  appId: "<APP_ID>"
 };
 
-// Initialize Firebase
+// Initializes Firebase app with the configuration object
 const app = initializeApp(firebaseConfig);
 
-export const db = getFirestore(app)
+/**
+* Associa la bdd Firestore amb l'app Firebase.
+* @function
+* @returns {Object} La bdd Firestore.
+*/
+export const db = getFirestore(app);
